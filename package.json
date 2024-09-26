@@ -2,7 +2,7 @@
   "name": "nuc-arc",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,6 +16,9 @@
   },
   "dependencies": {
     "@nucleoidai/expert": "^1.0.3",
-    "dotenv": "^16.4.5"
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "openai": "^4.63.0",
+    "uuid": "^10.0.0"
   }
 }
