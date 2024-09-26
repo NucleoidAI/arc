@@ -46,7 +46,7 @@ async function instances(declarations, outputs) {
   console.log("Analyzing instances...");
   console.log(`${outputs.length} output matrices to analyze`);
 
-  const result = [];
+  const instances = [];
   let index1 = 1;
 
   for (const output of outputs) {
@@ -83,14 +83,15 @@ async function instances(declarations, outputs) {
     });
     const [first] = choices;
 
-    let index2 = result.length;
-    const { instances } = Markdown.toJSON(first.message.content);
+    let index2 = instances.length + 1;
+    const result = Markdown.toJSON(first.message.content);
 
-    for (const instance of instances) {
+    for (const instance of result.instances) {
       console.debug(`Instance ${index2++}: ${JSON.stringify(instance)}`);
     }
+
     console.log("");
-    result.push();
+    instances.push(...result.instances);
   }
 
   console.log("Instances extracted");
