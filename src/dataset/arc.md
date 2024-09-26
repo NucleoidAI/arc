@@ -33,7 +33,7 @@ if($Obj.left === 1 && $Obj.right === 1 && $Obj.rear === 1) {
     [1, 1],
     [8, 1]
   ],
-  "nuc": "var obj1 = new Obj();\nobj1.left = 1;\nobj1.right = 1;\nobj1.rear = 1;\nobj1.front = 8;"
+  "nuc": "var obj1 = new Obj();\nobj1.left = 1;\nobj1.right = 1;\nobj1.rear = 1;\nobj1.front = 8; obj1;"
 }
 ```
 
@@ -43,7 +43,7 @@ if($Obj.left === 1 && $Obj.right === 1 && $Obj.rear === 1) {
     [1, 8],
     [1, 1]
   ],
-  "nuc": "var obj3 = new Obj();\nobj3.left = 1;\nobj3.right = 1;\nobj3.rear = 1;\nobj3.front = 8;"
+  "nuc": "var obj3 = new Obj();\nobj3.left = 1;\nobj3.right = 1;\nobj3.rear = 1;\nobj3.front = 8; obj3"
 }
 ```
 
@@ -53,7 +53,7 @@ if($Obj.left === 1 && $Obj.right === 1 && $Obj.rear === 1) {
     [1, 1],
     [1, 8]
   ],
-  "nuc": "var obj2 = new Obj();\nobj2.left = 1;\nobj2.right = 1;\nobj2.rear = 1;\nobj2.front = 8;"
+  "nuc": "var obj2 = new Obj();\nobj2.left = 1;\nobj2.right = 1;\nobj2.rear = 1;\nobj2.front = 8; obj2;"
 }
 ```
 
@@ -90,7 +90,7 @@ Instance #1 in the ARC Matrix
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0]
   ],
-  "nuc": "var obj1 = new Obj(); obj1.left = 1; obj1.right = 1; obj1.rear = 1; obj1.front = 8;"
+  "nuc": "var obj1 = new Obj(); obj1.left = 1; obj1.right = 1; obj1.rear = 1; obj1.front = 8; obj1;"
 }
 ```
 
@@ -108,7 +108,7 @@ Instance #2 in the ARC Matrix
     [0, 0, 1, 1, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0]
   ],
-  "nuc": "var obj2 = new Obj(); obj2.left = 1; obj2.right = 1; obj2.rear = 1; obj2.front = 8;"
+  "nuc": "var obj2 = new Obj(); obj2.left = 1; obj2.right = 1; obj2.rear = 1; obj2.front = 8; obj2;"
 }
 ```
 
@@ -143,7 +143,7 @@ Instance #1 in the ARC Matrix
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0]
   ],
-  "nuc": "var obj1 = new Obj(); obj1.left = 1; obj1.right = 1; obj1.rear = 1; obj1.front = 8;"
+  "nuc": "var obj1 = new Obj(); obj1.left = 1; obj1.right = 1; obj1.rear = 1; obj1.front = 8; obj1;"
 }
 ```
 
@@ -161,6 +161,6 @@ Instance #2 in the ARC Matrix
     [0, 0, 0, 0, 0, 0, 1, 1],
     [0, 0, 0, 0, 0, 0, 1, 8]
   ],
-  "nuc": "var obj2 = new Obj(); obj2.left = 1; obj2.right = 1; obj2.rear = 1; obj2.front = 8;"
+  "nuc": "var obj2 = new Obj(); obj2.left = 1; obj2.right = 1; obj2.rear = 1; obj2.front = 8; obj2;"
 }
 ```

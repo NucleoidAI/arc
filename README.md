@@ -11,29 +11,29 @@ Context Object:
   "declarations": "NUC_CODE",
   "train": [
     {
-      "input": "ARC_ARRAY",
-      "output": "ARC_ARRAY"
+      "input": "ARC_MATRIX",
+      "output": "ARC_MATRIX"
     }
   ],
   "test": [
     {
-      "input": "ARC_ARRAY",
-      "output": "ARC_ARRAY"
+      "input": "ARC_MATRIX",
+      "output": "ARC_MATRIX"
     }
   ],
   "instances": {
     "train": [
       {
-        "arc": "ARC_ARRAY",
+        "arc": "ARC_MATRIX",
         "nuc": "NUC_CODE",
-        "result": "NUC_RESULT"
+        "value": "NUC_VALUE"
       }
     ],
     "test": [
       {
-        "arc": "ARC_ARRAY",
+        "arc": "ARC_MATRIX",
         "nuc": "NUC_CODE",
-        "result": "NUC_RESULT"
+        "value": "NUC_VALUE"
       }
     ]
   }

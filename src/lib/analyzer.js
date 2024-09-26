@@ -2,6 +2,8 @@ const openai = require("./openai");
 const dataset = require("../dataset");
 const Nuc = require("./Nuc");
 const Markdown = require("./Markdown");
+const { v4: uuid } = require("uuid");
+const nucleoid = require("./nucleoid");
 
 async function declarations(train) {
   console.log("Analyzing declarations...");
@@ -45,12 +47,18 @@ async function declarations(train) {
 async function instances(declarations, outputs) {
   console.log("Analyzing instances...");
   console.log(`${outputs.length} output matrices to analyze`);
+  console.log("");
 
   const instances = [];
   let index1 = 1;
 
   for (const output of outputs) {
-    console.debug(`Output Matrix ${index1++}: ${JSON.stringify(output)}`);
+    const sessionId = uuid();
+    console.log(`Output Matrix ${index1++}`);
+    console.debug(JSON.stringify(output));
+    console.log("Initializing Nucleoid session with declarations...");
+    await nucleoid.run(sessionId, declarations);
+
     const messages = [
       {
         role: "system",
@@ -87,6 +95,8 @@ async function instances(declarations, outputs) {
     const result = Markdown.toJSON(first.message.content);
 
     for (const instance of result.instances) {
+      console.log("Creating instance in Nucleoid...");
+      instance.value = await nucleoid.run(sessionId, instance.nuc);
       console.debug(`Instance ${index2++}: ${JSON.stringify(instance)}`);
     }
 
