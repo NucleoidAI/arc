@@ -3,6 +3,7 @@
 Nucleoid extends JavaScript syntax for declarative (logic) programming.
 Nucleoid has two modes; declarative and imperative.
 Imperative mode of Nucleoid is same as JavaScript.
+nuc is programming language of Nucleoid. 
 
 ## Contextuality
 
