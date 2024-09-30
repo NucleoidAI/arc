@@ -3,8 +3,9 @@ const dataset = require("../dataset");
 const Markdown = require("./Markdown");
 const { v4: uuid } = require("uuid");
 const nucleoid = require("./nucleoid");
+const Matrix = require("../lib/Matrix");
 
-async function declarations(train) {
+async function declarations(training_dataset) {
   console.log("Analyzing declarations...");
   const messages = [
     {
@@ -17,14 +18,14 @@ async function declarations(train) {
       role: "user",
       content: `
         Nucleoid Documentation: ${dataset.nucleoid}
-        ARC Training Documentation: ${dataset.arc}
+        ARC Documentation: ${dataset.arc}
       `,
     },
     {
       role: "user",
       content: `
-        Given Input and Output matrices:
-        ${JSON.stringify(train)}
+        Given Input and Output Matrices:
+        ${JSON.stringify(training_dataset)}
       `,
     },
   ];
@@ -34,28 +35,32 @@ async function declarations(train) {
   });
   const [first] = choices;
 
-  console.log(first.message.content);
   const { declarations } = Markdown.toJSON(first.message.content);
+
+  console.debug("Declarations:");
   console.debug(declarations);
-  console.log("Declarations parsed");
+  console.log("");
 
   return declarations.join("\n");
 }
 
-async function instances(declarations, matrices) {
-  console.log("Analyzing train instances...");
-  console.log(`${matrices.length} matrices to analyze`);
+async function instances(declarations, training_dataset) {
+  console.log("Analyzing training dataset...");
+  console.log(`${training_dataset.length} matrix pair(s) to analyze`);
   console.log("");
 
   const instances = [];
   let index1 = 1;
 
-  for (const { input, output } of matrices) {
+  for (const { input_matrix, output_matrix } of training_dataset) {
     const sessionId = uuid();
-    console.log(`Input Matrix ${index1++}`);
-    console.debug(JSON.stringify(input));
+
     console.log("Initializing Nucleoid session with declarations...");
     await nucleoid.run(sessionId, declarations);
+
+    console.debug(`Input Matrix ${index1++}:`);
+    Matrix.toString(input_matrix);
+    console.debug("");
 
     const { choices } = await openai.chat({
       messages: [
@@ -69,7 +74,7 @@ async function instances(declarations, matrices) {
           role: "user",
           content: `
             Nucleoid Documentation: ${dataset.nucleoid}
-            ARC Training Documentation: ${dataset.arc}
+            ARC Documentation: ${dataset.arc}
       `,
         },
         {
@@ -78,7 +83,7 @@ async function instances(declarations, matrices) {
             Declarations:
             ${declarations}
             Given Input Matrix:
-            ${JSON.stringify(input)}
+            ${JSON.stringify(input_matrix)}
       `,
         },
       ],
@@ -92,26 +97,37 @@ async function instances(declarations, matrices) {
       const { input_instance, nuc } = instance;
       console.log("Creating instance in Nucleoid...");
       instance.instance_value = await nucleoid.run(sessionId, nuc);
-      console.debug(`Input Instance ${index2++}: ${JSON.stringify(instance)}`);
 
       instance.output_instance = await output_instance(
         declarations,
-        input,
-        output,
+        input_matrix,
+        output_matrix,
         input_instance
       );
+
+      console.debug(`Training Input Instance ${index2++}:`);
+      Matrix.toString(instance.input_instance);
+      console.debug("---");
+      Matrix.toString(instance.output_instance);
+      console.debug(instance.nuc);
+      console.debug(instance.instance_value);
+      console.debug("");
     }
 
-    console.log("");
     instances.push(...result.instances);
   }
 
-  console.log("Input and Output Instances are extracted");
+  console.log("Input and output instances are extracted");
   return instances;
 }
 
-async function output_instance(declaration, input, output, input_instance) {
-  console.log("Extracting output instance...");
+async function output_instance(
+  declarations,
+  input_matrix,
+  output_matrix,
+  input_instance
+) {
+  console.log("Extracting training output instance...");
   const { choices } = await openai.chat({
     messages: [
       {
@@ -124,7 +140,7 @@ async function output_instance(declaration, input, output, input_instance) {
         role: "user",
         content: `
           Nucleoid Documentation: ${dataset.nucleoid}
-          ARC Training Documentation: ${dataset.arc}
+          ARC Documentation: ${dataset.arc}
       `,
       },
       {
@@ -133,9 +149,9 @@ async function output_instance(declaration, input, output, input_instance) {
           Declarations:
           ${declarations}
           Given Input Matrix:
-          ${JSON.stringify(input)}
+          ${JSON.stringify(input_matrix)}
           Given Output Matrix:
-          ${JSON.stringify(output)}
+          ${JSON.stringify(output_matrix)}
           Given Input Instance:
           ${JSON.stringify(input_instance)}
       `,
@@ -144,10 +160,9 @@ async function output_instance(declaration, input, output, input_instance) {
   });
   const [first] = choices;
 
-  console.log("Output found:");
-  console.debug(JSON.stringify(Markdown.toJSON(first.message.content)));
-
-  return Markdown.toJSON(first.message.content);
+  console.log("Training output instance is extracted");
+  const { output_instance } = Markdown.toJSON(first.message.content);
+  return output_instance;
 }
 
 module.exports = { declarations, instances };

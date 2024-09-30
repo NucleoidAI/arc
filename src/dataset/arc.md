@@ -8,13 +8,13 @@
 
 ## Declarations
 
-- Identifying declarations for given input and output matrices in Nucleoid Syntax
+- Identifying declarations for given input and output matrices in Nucleoid Syntax is creating `declarations` based on `input_matrix` and `ouput_matrix` in `nuc` language
 
 Example 1:
 
 ```json
 {
-  "given_input_matrix": [
+  "input_matrix": [
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 3, 3, 0, 0, 0, 0, 0],
     [0, 3, 0, 0, 0, 0, 0, 3],
@@ -24,7 +24,7 @@ Example 1:
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0]
   ],
-  "given_output_matrix": [
+  "output_matrix": [
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 3, 3, 0, 0, 0, 0, 0],
     [0, 3, 7, 0, 0, 0, 7, 3],
@@ -34,7 +34,7 @@ Example 1:
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0]
   ],
-  "identified_declarations": [
+  "declarations": [
     "class Obj { constructor() { this.left = 0; this.right = 0; this.rear = 0; this.front = 0; }}",
     "if($Obj.left === 3 && $Obj.right === 3 && $Obj.rear === 3) { $Obj.front = 7; }"
   ]
@@ -45,7 +45,7 @@ Example 2:
 
 ```json
 {
-  "given_input_matrix": [
+  "input_matrix": [
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 9, 9, 0, 0],
     [0, 0, 0, 0, 9, 0, 0, 0],
@@ -55,7 +55,7 @@ Example 2:
     [0, 0, 0, 0, 0, 9, 9, 0],
     [0, 0, 0, 0, 0, 0, 9, 0]
   ],
-  "given_output_matrix": [
+  "output_matrix": [
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 9, 9, 0, 0],
     [0, 0, 0, 0, 9, 2, 0, 0],
@@ -75,7 +75,7 @@ Example 2:
 ## Instances
 
 - Extracting input instances based on declarations is creating array of `input_instance` for given input matrix and Nucleoid code as `nuc`
-- Finding output instance from given output matrix for given input instance based on declarations is creating `output_instance` for `input_instance` from `given_output_matrix` based on `declarations`
+- Finding output instance from given output matrix for given input instance based on declarations is creating `output_instance` for `input_instance` from `output_matrix` based on `declarations`
 - Drawing output instance from given input instance is creating `output_instance` with given `input_instance` and `instance_value`
 
 Example 1:
@@ -86,7 +86,7 @@ Example 1:
     "class Obj { constructor() { this.left = 0; this.right = 0; this.rear = 0; this.front = 0; }}", 
     "if($Obj.left === 6 && $Obj.right === 6 && $Obj.rear === 6) { $Obj.front = 8; }"
   ],
-  "given_input_matrix": [
+  "input_matrix": [
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 6, 0],
     [0, 0, 0, 0, 0, 6, 6, 0],
@@ -96,7 +96,7 @@ Example 1:
     [0, 0, 6, 6, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0]
   ],
-  "given_output_matrix": [
+  "output_matrix": [
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 8, 6, 0],
     [0, 0, 0, 0, 0, 6, 6, 0],
@@ -163,7 +163,7 @@ Example 2:
 
 ```json
 {
-  "given_input_matrix": [
+  "input_matrix": [
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 1, 0, 0, 0, 0],
     [0, 0, 1, 1, 0, 1, 1, 0],
@@ -173,7 +173,7 @@ Example 2:
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0]
   ],
-  "given_output_matrix": [
+  "output_matrix": [
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 2, 1, 0, 0, 0, 0],
     [0, 0, 1, 1, 0, 1, 1, 0],
@@ -240,7 +240,7 @@ Example 3:
 
 ```json
 {
-  "given_input_matrix": [
+  "input_matrix": [
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 9, 9],
     [0, 0, 0, 0, 0, 0, 0, 9],
@@ -250,7 +250,7 @@ Example 3:
     [0, 9, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0]
   ],
-  "given_output_matrix": [
+  "output_matrix": [
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 9, 9],
     [0, 0, 0, 0, 0, 0, 1, 9],
