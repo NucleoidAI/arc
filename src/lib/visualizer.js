@@ -4,7 +4,7 @@ const dataset = require("../dataset");
 const openai = require("./openai");
 const Markdown = require("./Markdown");
 
-async function instances(declarations, train_instances, test_matrix) {
+async function instances(declarations, train, train_instances, test_matrix) {
   console.log("Analyzing test instances...");
   console.log("");
 
@@ -55,6 +55,7 @@ async function instances(declarations, train_instances, test_matrix) {
 
     instance.output_instance = await output_instance(
       declarations,
+      train,
       train_instances,
       input_instance
     );
@@ -64,30 +65,34 @@ async function instances(declarations, train_instances, test_matrix) {
   return result.instances;
 }
 
-async function output_instance(declarations, train_instances, test_instance) {
+async function output_instance(
+  declarations,
+  train,
+  train_instances,
+  test_instance
+) {
   console.log("Extracting output instance...");
   const { choices } = await openai.chat({
     messages: [
       {
         role: "system",
         content: `
-          - Draw "output_instance" for given "input_instance" based on "instance_value" 
+          - Draw output instance from given input instance
           - Return in JSON format as { output_instance: [ARC_OUTPUT_INSTANCE_MATRIX] }`,
       },
       {
         role: "user",
         content: `
-          Nucleoid Documentation: ${dataset.nucleoid}
-          ARC Training Documentation: ${dataset.arc}
+          ARC Documentation: ${dataset.arc}
       `,
       },
       {
         role: "user",
         content: `
-          Declarations:
-          ${declarations}
-          ARC Training Dataset:
-          ${train_instances}
+          Train Matrices:
+          ${JSON.stringify(train)}
+          Train Dataset:
+          ${JSON.stringify(train_instances)}
           Given Input Instance:
           ${JSON.stringify(test_instance)}
       `,
@@ -104,28 +109,23 @@ async function output_instance(declarations, train_instances, test_instance) {
 }
 
 function merge(...matrices) {
-  const rows = matrices[0].length;
-  const cols = matrices[0][0].length;
+  // Assuming all matrices are of the same dimensions
+  const numRows = matrices[0].length;
+  const numCols = matrices[0][0].length;
 
-  let mergedMatrix = [];
+  let result = Array.from({ length: numRows }, () => Array(numCols).fill(0));
 
-  for (let i = 0; i < rows; i++) {
-    let newRow = [];
-    for (let j = 0; j < cols; j++) {
-      let value = 0;
-
-      for (let k = 0; k < matrices.length; k++) {
-        if (matrices[k][i][j] !== 0) {
-          value = matrices[k][i][j];
+  for (let matrix of matrices) {
+    for (let i = 0; i < numRows; i++) {
+      for (let j = 0; j < numCols; j++) {
+        if (matrix[i][j] !== 0) {
+          result[i][j] = matrix[i][j];
         }
       }
-      newRow.push(value);
     }
-    mergedMatrix.push(newRow);
   }
 
-  console.log("Instance matrices are merged");
-  return mergedMatrix;
+  return result;
 }
 
 module.exports = { instances, merge };
