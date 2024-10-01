@@ -108,7 +108,6 @@ Example 1:
   ],
   "instances": [
     {
-      "instance_name": "obj1",
       "input_instance": [
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 6, 0],
@@ -133,7 +132,6 @@ Example 1:
       "instance_value": {"id":"obj1","left":6,"right":6,"rear":6,"front":8}
     },
     {
-      "instance_name": "obj2",
       "input_instance": [
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
@@ -187,7 +185,6 @@ Example 2:
   ],
   "instances": [
     {
-      "instance_name": "obj3",
       "input_instance": [
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 1, 0, 0, 0, 0],
@@ -212,7 +209,6 @@ Example 2:
       "instance_value": {"id":"obj3","left":3,"right":3,"rear":3,"front":7}
     },
     {
-      "instance_name": "obj4",
       "input_instance": [
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
@@ -266,7 +262,6 @@ Example 3:
   ],
   "instances": [
     {
-      "instance_name": "obj5",
       "input_instance": [
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 9, 9],
@@ -291,7 +286,6 @@ Example 3:
       "instance_value": {"id":"obj5","left":9,"right":9,"rear":9,"front":1}
     },
     {
-      "instance_name": "obj6",
       "input_instance": [
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
@@ -316,7 +310,6 @@ Example 3:
       "instance_value": {"id":"obj6","left":9,"right":9,"rear":9,"front":1}
     },
     {
-      "instance_name": "obj7",
       "input_instance": [
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 9, 9],
