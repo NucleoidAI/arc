@@ -138,7 +138,14 @@ async function start() {
     });
   }
 
-  const result = visualizer.merge(
+  let background = test_input_matrix;
+
+  for (const { input_instance } of instances) {
+    background = Matrix.subtract(background, input_instance);
+  }
+
+  const result = Matrix.merge(
+    background,
     ...test_instances.map((i) => i.output_instance)
   );
 

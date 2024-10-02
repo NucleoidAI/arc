@@ -182,23 +182,4 @@ async function output_instance({
   return { output_instance };
 }
 
-function merge(...matrices) {
-  const numRows = matrices[0].length;
-  const numCols = matrices[0][0].length;
-
-  let result = Array.from({ length: numRows }, () => Array(numCols).fill(0));
-
-  for (let matrix of matrices) {
-    for (let i = 0; i < numRows; i++) {
-      for (let j = 0; j < numCols; j++) {
-        if (matrix[i][j] !== 0) {
-          result[i][j] = matrix[i][j];
-        }
-      }
-    }
-  }
-
-  return result;
-}
-
-module.exports = { instances, value, output_instance, merge };
+module.exports = { instances, value, output_instance };
