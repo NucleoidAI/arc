@@ -4,27 +4,17 @@ const dataset = require("../dataset");
 const openai = require("./openai");
 const Markdown = require("./Markdown");
 const Matrix = require("../lib/Matrix");
+const { patterns } = require("./analyzer");
 
 async function instances({
   patterns,
+  declarations,
   training_dataset,
   training_instances,
   test_input_matrix,
 }) {
   console.log("Analyzing test input matrix...");
   console.log("");
-
-  const patterns_dataset = require("../dataset/patterns.json").map(
-    ({ input_matrix, output_matrix, instances }) => {
-      return {
-        input_matrix,
-        output_matrix,
-        instances: instances.map(({ input_instance }) => ({
-          input_instance,
-        })),
-      };
-    }
-  );
 
   console.debug("Test Input Matrix:");
   Matrix.toString(test_input_matrix);
@@ -36,13 +26,12 @@ async function instances({
         role: "system",
         content: `
           - Extract each input_instance from given input_matrix
-          - Return instances in JSON format as { "instances": [ { input_instance: [INPUT_INSTANCE] }, ... ] }`,
+          - Return instances in JSON format as { "instances": [ { input_instance: [INPUT_INSTANCE] }, ... ] }
+        `,
       },
       {
-        role: "user",
+        role: "system",
         content: `
-          ARC Documentation:
-          ${dataset.declarations}
           Training:
           - input_matrix is inserted matrix
           - output_matrix is converted matrix from inserted matrix
@@ -50,16 +39,18 @@ async function instances({
           - input_instance must contain only 1 instance of found pattern
           - input_instance must be filled rest of empty spaces with 0s
           - input_instance must have in same dimension with its input_matrix
-          ${JSON.stringify(patterns_dataset)}
-          `,
+          ${dataset.visualizer.instances()}
+        `,
       },
       {
         role: "user",
         content: `
           Patterns:
           ${patterns}
+          Training Dataset:
+          ${JSON.stringify(training_dataset)}
           Training Instances:
-          ${training_instances}
+          ${JSON.stringify(training_instances)}
           Given Input Matrix:
           ${JSON.stringify(test_input_matrix)}
           `,
@@ -94,15 +85,12 @@ async function value({
         role: "system",
         content: `
           - Create Nucleoid code for given instance 
-          - Return instances in JSON format as { nuc: [NUCLEOID_CODE] }
+          - Return instances in JSON format as { nuc: "NUCLEOID_CODE" }
           `,
       },
       {
-        role: "user",
-        content: `
-          Nucleoid Documentation: ${dataset.nucleoid}
-          ARC Documentation: ${dataset.arc}
-          `,
+        role: "system",
+        content: dataset.visualizer.value(),
       },
       {
         role: "user",
@@ -117,7 +105,7 @@ async function value({
           ${JSON.stringify(training_instances)}
           Given Input Instance:
           ${JSON.stringify(test_input_instance)}
-          `,
+        `,
       },
     ],
   });
@@ -137,6 +125,8 @@ async function value({
 }
 
 async function output_instance({
+  patterns,
+  declarations,
   training_dataset,
   training_instances,
   test_input_instance,
@@ -148,27 +138,33 @@ async function output_instance({
       {
         role: "system",
         content: `
-          - Generate output instances based for given input matrix
-          - Return instances in JSON format as { output_instance: [OUTPUT_INSTANCE], ... ] }`,
+          - Generate output_instance for given input_instance and instance_value based on given patterns and declarations 
+          - Return instances in JSON format as { output_instance: [OUTPUT_INSTANCE] ] }`,
+      },
+      {
+        role: "system",
+        content: dataset.visualizer.output_instance(),
       },
       {
         role: "user",
         content: `
-          ARC Documentation: ${dataset.arc}
-          `,
-      },
-      {
-        role: "user",
-        content: `
-          Training Dataset:
-          ${JSON.stringify(training_dataset)}
           Training Instances:
-          ${JSON.stringify(training_instances)}
-          Given Input Value:
+          ${JSON.stringify(
+            training_instances.map(
+              ({ input_instance, output_instance, instance_value }) => ({
+                input_instance,
+                output_instance,
+                instance_value,
+              })
+            )
+          )}
+          Given patterns:
+          ${patterns}
+          Given instance_value:
           ${JSON.stringify(instance_value)}
-          Given Input Instance:
+          Given input_instance:
           ${JSON.stringify(test_input_instance)}
-          `,
+        `,
       },
     ],
   });

@@ -1,4 +1,4 @@
-const dataset = require("../dataset/patterns.json");
+const dataset = require("../dataset/training.json");
 
 function tokens(input) {
   const tokens = input.trim().split(/\s+/);

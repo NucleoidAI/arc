@@ -47,17 +47,22 @@ const analyzer = require("./lib/analyzer");
 const visualizer = require("./lib/visualizer");
 const nucleoid = require("./lib/nucleoid");
 const { v4: uuid } = require("uuid");
+const debug = require("./debug");
 
 const {
   train,
   test: [{ input: test_input_matrix }],
-} = require("./data/training/3aa6fb7a.json");
+} = require("./data/training/3aa6fb7a.json"); //0ca9ddb6
 const Matrix = require("./lib/Matrix");
 
 const training_dataset = train.map(({ input, output }) => ({
   input_matrix: input,
   output_matrix: output,
 }));
+
+// const training_dataset = require("./dataset/training.core.json").dataset.map(
+//   ({ input_matrix, output_matrix }) => ({ input_matrix, output_matrix })
+// );
 
 async function start() {
   const training_session_id = uuid();
@@ -108,6 +113,7 @@ async function start() {
 
   const { instances } = await visualizer.instances({
     patterns,
+    declarations,
     training_dataset,
     training_instances,
     test_input_matrix,
@@ -124,6 +130,8 @@ async function start() {
     });
 
     const { output_instance } = await visualizer.output_instance({
+      patterns,
+      declarations,
       training_dataset,
       training_instances,
       test_input_instance: input_instance,

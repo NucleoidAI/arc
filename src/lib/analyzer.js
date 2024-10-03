@@ -8,26 +8,37 @@ async function patterns({ training_dataset }) {
   console.log("Analyzing patterns...");
 
   const { choices } = await openai.chat({
+    max_tokens: 5012,
+    response_format: {
+      type: "text",
+    },
     messages: [
       {
         role: "system",
         content: `
-          - Provide logical explanation of patterns found in between "input_matrix" and "output_matrix" given dataset for redrawing as "patterns"
-          - Return in JSON format as { patterns: "PATTERNS_EXPLANATION" }
-          `,
+          - Provide logical explanation of patterns found in between "input_matrix" and "output_matrix" in given dataset for redrawing
+          - Provide all rules found in patterns
+          - Provide complete details of found shapes and their parts also formal names of found shapes and their parts
+          - Provide complete summery of findings
+          - Provide only clear patterns and if found pattern is not certain, skip it without mentioning
+        `,
+      },
+      {
+        role: "user",
+        content: dataset.analyzer.patterns(),
       },
       {
         role: "user",
         content: `
-        Given Dataset
-        ${JSON.stringify(training_dataset)}
-        `,
+          Given ARC Dataset:
+          ${JSON.stringify(training_dataset)}
+          `,
       },
     ],
   });
 
   const [first] = choices;
-  const { patterns } = Markdown.toJSON(first.message.content);
+  const patterns = first.message.content;
 
   console.debug("Patterns:");
   console.debug(patterns);
@@ -35,20 +46,45 @@ async function patterns({ training_dataset }) {
   return { patterns };
 }
 
+async function declarations({ training_dataset, patterns }) {
+  console.log("Analyzing declarations...");
+
+  const { choices } = await openai.chat({
+    messages: [
+      {
+        role: "system",
+        content: `
+          - Identify declarations for given matrix dataset in Nucleoid Syntax
+          - Return declarations in JSON format as { declarations: [NUC_DECLARATIONS] },
+          `,
+      },
+      {
+        role: "system",
+        content: dataset.analyzer.declarations(),
+      },
+      {
+        role: "user",
+        content: `
+          Found Patterns:
+          ${patterns}
+          Given Matrix Dataset:
+          ${JSON.stringify(training_dataset)}
+        `,
+      },
+    ],
+  });
+
+  const [first] = choices;
+  const { declarations } = Markdown.toJSON(first.message.content);
+
+  console.debug("Declarations:");
+  console.debug(declarations);
+
+  return { declarations };
+}
+
 async function instances({ patterns, input_matrix, output_matrix }) {
   console.log("Extracting instances...");
-
-  const patterns_dataset = require("../dataset/patterns.json").map(
-    ({ input_matrix, output_matrix, instances }) => {
-      return {
-        input_matrix,
-        output_matrix,
-        instances: instances.map(({ input_instance }) => ({
-          input_instance,
-        })),
-      };
-    }
-  );
 
   const { choices } = await openai.chat({
     messages: [
@@ -61,7 +97,7 @@ async function instances({ patterns, input_matrix, output_matrix }) {
           `,
       },
       {
-        role: "user",
+        role: "system",
         content: `
           Training:
           - input_matrix is inserted matrix
@@ -74,7 +110,7 @@ async function instances({ patterns, input_matrix, output_matrix }) {
           - output_instance must contain only 1 instance of found pattern
           - output_instance must be filled rest of empty spaces with 0s
           - output_instance must have in same dimension with its output_matrix
-          ${JSON.stringify(patterns_dataset)}
+          ${dataset.analyzer.instances()}
           `,
       },
       {
@@ -105,44 +141,6 @@ async function instances({ patterns, input_matrix, output_matrix }) {
   return { instances };
 }
 
-async function declarations({ training_dataset, patterns }) {
-  console.log("Analyzing declarations...");
-
-  const { choices } = await openai.chat({
-    messages: [
-      {
-        role: "system",
-        content: `
-          - Identify declarations for given matrix dataset in Nucleoid Syntax
-          - Return declarations in JSON format as { declarations: [NUC_DECLARATIONS] },
-          `,
-      },
-      {
-        role: "user",
-        content: `
-          Nucleoid Documentation: ${dataset.nucleoid}
-          ARC Documentation: ${dataset.declarations}
-      `,
-      },
-      {
-        role: "user",
-        content: `
-          Given Matrix Dataset:
-          ${JSON.stringify(training_dataset)}
-        `,
-      },
-    ],
-  });
-
-  const [first] = choices;
-  const { declarations } = Markdown.toJSON(first.message.content);
-
-  console.debug("Declarations:");
-  console.debug(declarations);
-
-  return { declarations };
-}
-
 async function value({
   instance_name,
   training_session_id,
@@ -158,15 +156,13 @@ async function value({
         role: "system",
         content: `
           - Create Nucleoid code for given instance 
-          - Return instances in JSON format as { nuc: [NUCLEOID_CODE] }
-          `,
+          - Return instances in JSON format as { nuc: "NUCLEOID_CODE" }
+        `,
       },
+
       {
-        role: "user",
-        content: `
-          Nucleoid Documentation: ${dataset.nucleoid}
-          ARC Documentation: ${dataset.arc}
-      `,
+        role: "system",
+        content: dataset.analyzer.value(),
       },
       {
         role: "user",
