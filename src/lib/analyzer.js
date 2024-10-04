@@ -1,9 +1,9 @@
 const openai = require("./openai");
 const Matrix = require("./Matrix");
-const dataset = require("../dataset");
+const instruct_dataset = require("../instruct_dataset");
 const nucleoid = require("./nucleoid");
 
-async function patterns({ training_dataset }) {
+async function patterns({ train_dataset }) {
   console.log("Analyzing patterns...");
 
   const { choices } = await openai.chat({
@@ -23,14 +23,14 @@ async function patterns({ training_dataset }) {
         `,
       },
       {
-        role: "user",
-        content: dataset.analyzer.patterns(),
+        role: "system",
+        content: instruct_dataset.analyzer.patterns(),
       },
       {
         role: "user",
         content: `
-          Given ARC Dataset:
-          ${JSON.stringify(training_dataset)}
+          train_dataset:
+          ${JSON.stringify(train_dataset)}
           `,
       },
     ],
@@ -39,13 +39,13 @@ async function patterns({ training_dataset }) {
   const [first] = choices;
   const patterns = first.message.content;
 
-  console.debug("Patterns:");
+  console.debug("patterns:");
   console.debug(patterns);
 
   return { patterns };
 }
 
-async function declarations({ training_dataset, patterns }) {
+async function declarations({ train_dataset, patterns }) {
   console.log("Analyzing declarations...");
 
   const { choices } = await openai.chat({
@@ -53,21 +53,21 @@ async function declarations({ training_dataset, patterns }) {
       {
         role: "system",
         content: `
-          - Identify declarations for given matrix dataset in Nucleoid Syntax
-          - Return declarations in JSON format as { declarations: [NUC_DECLARATIONS] },
+          - Identify declarations for given train_dataset in Nucleoid Syntax
+          - Return declarations in JSON format as { declarations: [NUC_DECLARATIONS] }
           `,
       },
       {
         role: "system",
-        content: dataset.analyzer.declarations(),
+        content: instruct_dataset.analyzer.declarations(),
       },
       {
         role: "user",
         content: `
-          Found Patterns:
+          patterns:
           ${patterns}
-          Given Matrix Dataset:
-          ${JSON.stringify(training_dataset)}
+          train_dataset:
+          ${JSON.stringify(train_dataset)}
         `,
       },
     ],
@@ -76,7 +76,7 @@ async function declarations({ training_dataset, patterns }) {
   const [first] = choices;
   const { declarations } = JSON.parse(first.message.content);
 
-  console.debug("Declarations:");
+  console.debug("declarations:");
   console.debug(declarations);
 
   return { declarations };
@@ -98,7 +98,7 @@ async function instances({ patterns, input_matrix, output_matrix }) {
       {
         role: "system",
         content: `
-          Training:
+          Instructions:
           - input_matrix is inserted matrix
           - output_matrix is converted matrix from inserted matrix
           - input_instance contains an instance in input_matrix based on found pattern in between input_matrix and output_matrix
@@ -109,17 +109,17 @@ async function instances({ patterns, input_matrix, output_matrix }) {
           - output_instance must contain only 1 instance of found pattern
           - output_instance must be filled rest of empty spaces with 0s
           - output_instance must have in same dimension with its output_matrix
-          ${dataset.analyzer.instances()}
+          ${instruct_dataset.analyzer.instances()}
           `,
       },
       {
         role: "user",
         content: `
-        Pattern:
+        patterns:
         ${patterns}
-        Given input_matrix:
+        input_matrix:
         ${JSON.stringify(input_matrix)}
-        Given output_matrix:
+        output_matrix:
         ${JSON.stringify(output_matrix)}
         `,
       },
@@ -142,7 +142,7 @@ async function instances({ patterns, input_matrix, output_matrix }) {
 
 async function value({
   instance_name,
-  training_session_id,
+  train_session_id,
   declarations,
   input_instance,
   output_instance,
@@ -161,20 +161,20 @@ async function value({
 
       {
         role: "system",
-        content: dataset.analyzer.value(),
+        content: instruct_dataset.analyzer.value(),
       },
       {
         role: "user",
         content: `
           instance_name:
           ${instance_name}
-          Declarations:
-          ${JSON.stringify(declarations)}
-          Given Input Instance:
+          declarations:
+          ${declarations.join("\n")}
+          input_instance:
           ${JSON.stringify(input_instance)}
-          Given Output Instance:
+          output_instance:
           ${JSON.stringify(output_instance)}
-          `,
+        `,
       },
     ],
   });
@@ -183,11 +183,11 @@ async function value({
   const { nuc } = JSON.parse(first.message.content);
 
   console.log("Creating instance in Nucleoid...");
-  const instance_value = await nucleoid.run(training_session_id, nuc);
+  const instance_value = await nucleoid.run(train_session_id, nuc);
 
   console.debug("nuc:");
   console.debug(nuc);
-  console.debug("Value:");
+  console.debug("instance_value:");
   console.debug(instance_value);
 
   return { nuc, instance_value };
