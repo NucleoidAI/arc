@@ -1,5 +1,4 @@
 const openai = require("./openai");
-const Markdown = require("./Markdown");
 const Matrix = require("./Matrix");
 const dataset = require("../dataset");
 const nucleoid = require("./nucleoid");
@@ -75,7 +74,7 @@ async function declarations({ training_dataset, patterns }) {
   });
 
   const [first] = choices;
-  const { declarations } = Markdown.toJSON(first.message.content);
+  const { declarations } = JSON.parse(first.message.content);
 
   console.debug("Declarations:");
   console.debug(declarations);
@@ -128,7 +127,7 @@ async function instances({ patterns, input_matrix, output_matrix }) {
   });
 
   const [first] = choices;
-  const { instances } = Markdown.toJSON(first.message.content);
+  const { instances } = JSON.parse(first.message.content);
 
   instances.forEach((i) => {
     Matrix.toString(i.input_instance);
@@ -181,7 +180,7 @@ async function value({
   });
 
   const [first] = choices;
-  const { nuc } = Markdown.toJSON(first.message.content);
+  const { nuc } = JSON.parse(first.message.content);
 
   console.log("Creating instance in Nucleoid...");
   const instance_value = await nucleoid.run(training_session_id, nuc);

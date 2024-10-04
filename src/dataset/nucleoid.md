@@ -19,6 +19,7 @@ Nucleoid is a contextual. So, once class or function is defined in declarative m
 - Prefer `var` for creating instance globally
 - Last statement in the code block is returned as the result
 - All queries must be run in imperative mode
+- `value` is reserved name, do not use it
 
 ### Modes
 

@@ -1,6 +1,5 @@
 const openai = require("./openai");
 const dataset = require("../dataset");
-const Markdown = require("./Markdown");
 const { v4: uuid } = require("uuid");
 const nucleoid = require("./nucleoid");
 const Matrix = require("../lib/Matrix");
@@ -35,7 +34,7 @@ async function declarations(training_dataset) {
   });
   const [first] = choices;
 
-  const { declarations } = Markdown.toJSON(first.message.content);
+  const { declarations } = JSON.parse(first.message.content);
 
   console.debug("Declarations:");
   console.debug(declarations);
@@ -91,7 +90,7 @@ async function instances(declarations, training_dataset) {
     const [first] = choices;
 
     let index2 = instances.length + 1;
-    const result = Markdown.toJSON(first.message.content);
+    const result = JSON.parse(first.message.content);
 
     for (const instance of result.instances) {
       const { input_instance, nuc } = instance;
@@ -161,7 +160,7 @@ async function output_instance(
   const [first] = choices;
 
   console.log("Training output instance is extracted");
-  const { output_instance } = Markdown.toJSON(first.message.content);
+  const { output_instance } = JSON.parse(first.message.content);
   return output_instance;
 }
 

@@ -2,7 +2,6 @@ const { v4: uuid } = require("uuid");
 const nucleoid = require("./nucleoid");
 const dataset = require("../dataset");
 const openai = require("./openai");
-const Markdown = require("./Markdown");
 const Matrix = require("../lib/Matrix");
 const { patterns } = require("./analyzer");
 
@@ -25,7 +24,7 @@ async function instances({
       {
         role: "system",
         content: `
-          - Extract each input_instance from given input_matrix
+          - Extract each input_instance from given input_matrix based on patterns in training instances
           - Return instances in JSON format as { "instances": [ { input_instance: [INPUT_INSTANCE] }, ... ] }
         `,
       },
@@ -47,10 +46,13 @@ async function instances({
         content: `
           Patterns:
           ${patterns}
-          Training Dataset:
-          ${JSON.stringify(training_dataset)}
           Training Instances:
-          ${JSON.stringify(training_instances)}
+          ${JSON.stringify(
+            training_instances.map(({ input_instance, output_instance }) => ({
+              input_instance,
+              output_instance,
+            }))
+          )}
           Given Input Matrix:
           ${JSON.stringify(test_input_matrix)}
           `,
@@ -58,7 +60,7 @@ async function instances({
     ],
   });
   const [first] = choices;
-  const { instances } = Markdown.toJSON(first.message.content);
+  const { instances } = JSON.parse(first.message.content);
 
   console.debug("Test Instances:");
   instances.forEach((i) => {
@@ -111,7 +113,7 @@ async function value({
   });
 
   const [first] = choices;
-  const { nuc } = Markdown.toJSON(first.message.content);
+  const { nuc } = JSON.parse(first.message.content);
 
   console.log("Creating instance in Nucleoid...");
   const instance_value = await nucleoid.run(test_session_id, nuc);
@@ -170,7 +172,7 @@ async function output_instance({
   });
 
   const [first] = choices;
-  const { output_instance } = Markdown.toJSON(first.message.content);
+  const { output_instance } = JSON.parse(first.message.content);
 
   console.debug("Output Instance:");
   Matrix.toString(output_instance);

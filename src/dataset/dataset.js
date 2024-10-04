@@ -76,7 +76,7 @@ module.exports = {
   visualizer: {
     instances: () => {
       const dataset = training.map(({ dataset }) => ({
-        dateset: dataset.map(({ input_matrix, output_matrix, instances }) => ({
+        dateset: dataset.map(({ input_matrix, instances }) => ({
           input_matrix,
           instances: instances.map(({ input_instance }) => ({
             input_instance,
