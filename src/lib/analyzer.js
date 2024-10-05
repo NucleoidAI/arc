@@ -15,9 +15,10 @@ async function patterns({ train_dataset }) {
       {
         role: "system",
         content: `
-          - Provide logical explanation of patterns found in between "input_matrix" and "output_matrix" in given dataset for redrawing
+          - Provide detailed analysis of each example 
+          - Provide logical explanation of patterns found in between "input_matrix" and "output_matrix" in given train_dataset for redrawing
           - Provide all rules found in patterns
-          - Provide complete details of found shapes and their parts also formal names of found shapes and their parts
+          - Provide complete details of found shapes and their parts also their formal names
           - Provide complete summery of findings
           - Provide only clear patterns and if found pattern is not certain, skip it without mentioning
         `,
@@ -31,7 +32,7 @@ async function patterns({ train_dataset }) {
         content: `
           train_dataset:
           ${JSON.stringify(train_dataset)}
-          `,
+        `,
       },
     ],
   });
@@ -54,8 +55,9 @@ async function declarations({ train_dataset, patterns }) {
         role: "system",
         content: `
           - Identify declarations for given train_dataset in Nucleoid Syntax
-          - Return declarations in JSON format as { declarations: [NUC_DECLARATIONS] }
-          `,
+          - Use instruct_dataset as a reference
+          - Return in JSON format as { declarations: [NUC_DECLARATIONS] }
+        `,
       },
       {
         role: "system",
@@ -90,10 +92,11 @@ async function instances({ patterns, input_matrix, output_matrix }) {
       {
         role: "system",
         content: `
-          - Extract each input_instance from given input_matrix
-          - Extract each output_instance from given output_matrix
-          - Return in JSON format as { instances: [ { input_instance: [INPUT_INSTANCE], output_instance: [OUTPUT_INSTANCE] } ] }
-          `,
+          - Extract each input_instance from given input_matrix based on given patterns
+          - Extract each output_instance from given output_matrix based on given patterns
+          - Use instruct_dataset as a reference
+          - Return in JSON format as { instances: [ { input_instance: [INPUT_INSTANCES], output_instance: [OUTPUT_INSTANCES] } ] }
+        `,
       },
       {
         role: "system",
@@ -110,17 +113,17 @@ async function instances({ patterns, input_matrix, output_matrix }) {
           - output_instance must be filled rest of empty spaces with 0s
           - output_instance must have in same dimension with its output_matrix
           ${instruct_dataset.analyzer.instances()}
-          `,
+        `,
       },
       {
         role: "user",
         content: `
-        patterns:
-        ${patterns}
-        input_matrix:
-        ${JSON.stringify(input_matrix)}
-        output_matrix:
-        ${JSON.stringify(output_matrix)}
+          patterns:
+          ${patterns}
+          input_matrix:
+          ${JSON.stringify(input_matrix)}
+          output_matrix:
+          ${JSON.stringify(output_matrix)}
         `,
       },
     ],
@@ -154,8 +157,9 @@ async function value({
       {
         role: "system",
         content: `
-          - Create Nucleoid code for given instance 
-          - Return instances in JSON format as { nuc: "NUCLEOID_CODE" }
+          - Create Nucleoid code for given instance
+          - Use instruct_dataset as a reference
+          - Return in JSON format as { nuc: "NUCLEOID_CODE" }
         `,
       },
 

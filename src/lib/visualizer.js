@@ -3,7 +3,7 @@ const openai = require("./openai");
 const Matrix = require("../lib/Matrix");
 const instruct_dataset = require("../instruct_dataset");
 
-async function instances({ patterns, train_instances, test_input_matrix }) {
+async function instances({ patterns, train_dataset, test_input_matrix }) {
   console.log("Analyzing test input matrix...");
   console.log("");
 
@@ -16,8 +16,9 @@ async function instances({ patterns, train_instances, test_input_matrix }) {
       {
         role: "system",
         content: `
-          - Extract each input_instance from given input_matrix based on given patterns in training instances
-          - Return instances in JSON format as { "instances": [ { input_instance: [INPUT_INSTANCE] }, ... ] }
+          - Extract each input_instance from given input_matrix based on given patterns in train_dataset
+          - Use instruct_dataset and train_dataset as a reference
+          - Return in JSON format as { "instances": [ { input_instance: [INPUT_INSTANCE] }, ... ] }
         `,
       },
       {
@@ -38,13 +39,18 @@ async function instances({ patterns, train_instances, test_input_matrix }) {
         content: `
           patterns:
           ${patterns}
-          train_instances:
-          ${JSON.stringify(
-            train_instances.map(({ input_instance, output_instance }) => ({
-              input_instance,
-              output_instance,
-            }))
-          )}
+          train_dataset:
+          ${JSON.stringify({
+            declarations: train_dataset.declarations,
+            dateset: train_dataset.dataset.map(
+              ({ input_matrix, instances }) => ({
+                input_matrix,
+                instances: instances.map(({ input_instance }) => ({
+                  input_instance,
+                })),
+              })
+            ),
+          })}
           input_matrix:
           ${JSON.stringify(test_input_matrix)}
           `,
@@ -67,9 +73,7 @@ async function instances({ patterns, train_instances, test_input_matrix }) {
 async function value({
   instance_name,
   test_session_id,
-  declarations,
   train_dataset,
-  train_instances,
   test_input_instance,
 }) {
   console.log("Extracting test output instance...");
@@ -78,8 +82,9 @@ async function value({
       {
         role: "system",
         content: `
-          - Create Nucleoid code for given instance 
-          - Return instances in JSON format as { nuc: "NUCLEOID_CODE" }
+          - Create Nucleoid code for given instance
+          - Use instruct_dataset and train_dataset as a reference
+          - Return in JSON format as { nuc: "NUCLEOID_CODE" }
         `,
       },
       {
@@ -91,12 +96,29 @@ async function value({
         content: `
           instance_name:
           ${instance_name}
-          declarations:
-          ${declarations.join("\n")}
           train_dataset:
-          ${JSON.stringify(train_dataset)}
-          train_instances:
-          ${JSON.stringify(train_instances)}
+          ${JSON.stringify({
+            declarations: train_dataset.declarations,
+            dateset: train_dataset.dataset.map(
+              ({ input_matrix, output_matrix, instances }) => ({
+                input_matrix,
+                output_matrix,
+                instances: instances.map(
+                  ({
+                    instance_name,
+                    input_instance,
+                    output_instance,
+                    nuc,
+                  }) => ({
+                    instance_name,
+                    input_instance,
+                    output_instance,
+                    nuc,
+                  })
+                ),
+              })
+            ),
+          })}
           input_instance:
           ${JSON.stringify(test_input_instance)}
         `,
@@ -120,7 +142,7 @@ async function value({
 
 async function output_instance({
   patterns,
-  train_instances,
+  train_dataset,
   test_input_instance,
   instance_value,
 }) {
@@ -130,8 +152,9 @@ async function output_instance({
       {
         role: "system",
         content: `
-          - Generate output_instance for given input_instance and instance_value based on given patterns and declarations 
-          - Return instances in JSON format as { output_instance: [OUTPUT_INSTANCE] ] }`,
+          - Generate output_instance for given input_instance and instance_value based on given patterns and declarations
+          - Use instruct_dataset and train_dataset as a reference 
+          - Return in JSON format as { output_instance: [OUTPUT_INSTANCE] ] }`,
       },
       {
         role: "system",
@@ -142,20 +165,23 @@ async function output_instance({
         content: `
           patterns:
           ${patterns}
-          train_instances:
-          ${JSON.stringify(
-            train_instances.map(
-              ({ input_instance, output_instance, instance_value }) => ({
-                input_instance,
-                output_instance,
-                instance_value,
-              })
-            )
-          )}
-          instance_value:
-          ${JSON.stringify(instance_value)}
+          train_dataset:
+          ${JSON.stringify({
+            declarations: train_dataset.declarations,
+            dateset: train_dataset.dataset.map(({ instances }) => ({
+              instances: instances.map(
+                ({ input_instance, output_instance, instance_value }) => ({
+                  input_instance,
+                  output_instance,
+                  instance_value,
+                })
+              ),
+            })),
+          })}
           input_instance:
           ${JSON.stringify(test_input_instance)}
+          instance_value:
+          ${JSON.stringify(instance_value)}
         `,
       },
     ],

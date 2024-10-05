@@ -21,14 +21,17 @@ module.exports = {
     },
     declarations: () => {
       return `
-        ${nucleoid}
         ${arc}
+        ${nucleoid}
+        ${declarations}
         instruct_dataset:
         ${JSON.stringify(dataset)}
       `;
     },
     instances: () => {
       return `
+        ${arc}
+        ${instances}
         instruct_dataset:
         ${JSON.stringify(
           dataset.map(({ dataset }) => ({
@@ -36,9 +39,12 @@ module.exports = {
               ({ input_matrix, output_matrix, instances }) => ({
                 input_matrix,
                 output_matrix,
-                instances: instances.map(({ input_instance }) => ({
-                  input_instance,
-                })),
+                instances: instances.map(
+                  ({ input_instance, output_instance }) => ({
+                    input_instance,
+                    output_instance,
+                  })
+                ),
               })
             ),
           }))
@@ -47,11 +53,35 @@ module.exports = {
     },
     value: () => {
       return `
-        ${nucleoid}
         ${arc}
+        ${nucleoid}
         ${declarations}
+        ${instances}
         instruct_dataset:
-        ${JSON.stringify(dataset)}
+        ${JSON.stringify(
+          dataset.map(({ declarations, dataset }) => ({
+            declarations,
+            dateset: dataset.map(
+              ({ input_matrix, output_matrix, instances }) => ({
+                input_matrix,
+                output_matrix,
+                instances: instances.map(
+                  ({
+                    instance_name,
+                    input_instance,
+                    output_instance,
+                    nuc,
+                  }) => ({
+                    instance_name,
+                    input_instance,
+                    output_instance,
+                    nuc,
+                  })
+                ),
+              })
+            ),
+          }))
+        )}
       `;
     },
   },
@@ -75,12 +105,35 @@ module.exports = {
     },
     value: () => {
       return `
-        ${nucleoid}
         ${arc}
+        ${nucleoid}
         ${declarations}
         ${instances}
         instruct_dataset:
-        ${JSON.stringify(dataset)}
+        ${JSON.stringify(
+          dataset.map(({ declarations, dataset }) => ({
+            declarations,
+            dateset: dataset.map(
+              ({ input_matrix, output_matrix, instances }) => ({
+                input_matrix,
+                output_matrix,
+                instances: instances.map(
+                  ({
+                    instance_name,
+                    input_instance,
+                    output_instance,
+                    nuc,
+                  }) => ({
+                    instance_name,
+                    input_instance,
+                    output_instance,
+                    nuc,
+                  })
+                ),
+              })
+            ),
+          }))
+        )}
       `;
     },
     output_instance: () => {
@@ -89,9 +142,9 @@ module.exports = {
         ${instances}
         instruct_dataset:
         ${JSON.stringify(
-          dataset.map(({ dataset }) => ({
-            dateset: dataset.map(({ input_matrix, instances }) => ({
-              input_matrix,
+          dataset.map(({ dataset, declarations }) => ({
+            declarations,
+            dateset: dataset.map(({ instances }) => ({
               instances: instances.map(
                 ({ input_instance, output_instance, instance_value }) => ({
                   input_instance,
