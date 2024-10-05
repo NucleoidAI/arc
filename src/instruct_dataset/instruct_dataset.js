@@ -84,6 +84,11 @@ module.exports = {
         )}
       `;
     },
+    instance_patterns: () => {
+      return `
+        ${arc}
+      `;
+    },
   },
   visualizer: {
     instances: () => {

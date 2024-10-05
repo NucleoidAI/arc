@@ -69,8 +69,8 @@ async function start() {
   const { patterns } = await analyzer.patterns({ train_dataset });
 
   const { declarations } = await analyzer.declarations({
-    train_dataset,
     patterns,
+    train_dataset,
   });
 
   train_dataset.declarations = declarations;
@@ -110,6 +110,10 @@ async function start() {
 
   /* Visualizing */
 
+  const { instance_patterns } = await analyzer.instance_patterns({
+    train_dataset,
+  });
+
   const test_session_id = uuid();
   const test_instances = [];
 
@@ -117,7 +121,7 @@ async function start() {
   await nucleoid.run(test_session_id, train_dataset.declarations.join("\n"));
 
   const { instances } = await visualizer.instances({
-    patterns,
+    instance_patterns,
     train_dataset,
     test_input_matrix,
   });

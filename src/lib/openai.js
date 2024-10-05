@@ -15,7 +15,7 @@ async function chat({
   presence_penalty = 0,
   response_format = { type: "json_object" },
 }) {
-  console.info(messages);
+  // console.info(messages);
   return openai.chat.completions.create({
     model,
     messages,

@@ -3,11 +3,15 @@ const openai = require("./openai");
 const Matrix = require("../lib/Matrix");
 const instruct_dataset = require("../instruct_dataset");
 
-async function instances({ patterns, train_dataset, test_input_matrix }) {
-  console.log("Analyzing test input matrix...");
+async function instances({
+  instance_patterns,
+  train_dataset,
+  test_input_matrix,
+}) {
+  console.log("Analyzing test_input_matrix...");
   console.log("");
 
-  console.debug("Test Input Matrix:");
+  console.debug("test_input_matrix:");
   Matrix.toString(test_input_matrix);
   console.debug("");
 
@@ -16,18 +20,15 @@ async function instances({ patterns, train_dataset, test_input_matrix }) {
       {
         role: "system",
         content: `
-          - Extract each input_instance from given input_matrix based on given patterns in train_dataset
+          - Extract each input_instance from given input_matrix based on given instance_patterns in train_dataset
           - Use instruct_dataset and train_dataset as a reference
-          - Return in JSON format as { "instances": [ { input_instance: [INPUT_INSTANCE] }, ... ] }
+          - Return in JSON format as { "instances": [ { input_instance: [INPUT_INSTANCE] } ] }
         `,
       },
       {
         role: "system",
         content: `
           Instructions:
-          - input_matrix is inserted matrix
-          - output_matrix is converted matrix from inserted matrix
-          - input_instance contains an instance in input_matrix based on found pattern in between input_matrix and output_matrix
           - input_instance must contain only 1 instance of found pattern
           - input_instance must be filled rest of empty spaces with 0s
           - input_instance must have in same dimension with its input_matrix
@@ -37,11 +38,10 @@ async function instances({ patterns, train_dataset, test_input_matrix }) {
       {
         role: "user",
         content: `
-          patterns:
-          ${patterns}
+          instance_patterns:
+          ${instance_patterns}
           train_dataset:
           ${JSON.stringify({
-            declarations: train_dataset.declarations,
             dateset: train_dataset.dataset.map(
               ({ input_matrix, instances }) => ({
                 input_matrix,
@@ -53,20 +53,18 @@ async function instances({ patterns, train_dataset, test_input_matrix }) {
           })}
           input_matrix:
           ${JSON.stringify(test_input_matrix)}
-          `,
+        `,
       },
     ],
   });
   const [first] = choices;
   const { instances } = JSON.parse(first.message.content);
 
-  console.debug("Test Instances:");
+  console.debug("Test instances:");
   instances.forEach((i) => {
     Matrix.toString(i.input_instance);
     console.debug("--");
   });
-
-  console.log("Test Instances are extracted");
   return { instances };
 }
 
@@ -76,7 +74,7 @@ async function value({
   train_dataset,
   test_input_instance,
 }) {
-  console.log("Extracting test output instance...");
+  console.log("Calculating test instance_value...");
   const { choices } = await openai.chat({
     messages: [
       {
@@ -129,7 +127,7 @@ async function value({
   const [first] = choices;
   const { nuc } = JSON.parse(first.message.content);
 
-  console.log("Creating instance in Nucleoid...");
+  console.log("Creating test instance in Nucleoid...");
   const instance_value = await nucleoid.run(test_session_id, nuc);
 
   console.debug("nuc:");
@@ -146,7 +144,7 @@ async function output_instance({
   test_input_instance,
   instance_value,
 }) {
-  console.log("Extracting test output instance...");
+  console.log("Extracting test output_instance...");
   const { choices } = await openai.chat({
     messages: [
       {
