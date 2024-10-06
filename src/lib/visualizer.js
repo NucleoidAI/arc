@@ -3,6 +3,58 @@ const openai = require("./openai");
 const Matrix = require("../lib/Matrix");
 const instruct_dataset = require("../instruct_dataset");
 
+async function instance_patterns({ train_dataset }) {
+  console.log("Analyzing instance_patterns...");
+
+  const { choices } = await openai.chat({
+    max_tokens: 5012,
+    response_format: {
+      type: "text",
+    },
+    messages: [
+      {
+        role: "system",
+        content: `
+          - Provide detailed analysis of each example 
+          - Provide logical explanation of patterns found in between input_matrix and instances in given train_dataset for redrawing
+          - Provide all rules found in patterns for redrawing
+          - Provide complete details of found shapes and their parts also their formal names
+          - Provide complete summery of findings
+          - Provide only clear patterns and if found pattern is not certain, skip it without mentioning
+        `,
+      },
+      {
+        role: "system",
+        content: instruct_dataset.visualizer.instance_patterns(),
+      },
+      {
+        role: "user",
+        content: `
+          train_dataset:
+          ${JSON.stringify({
+            dataset: train_dataset.dataset.map(
+              ({ input_matrix, instances }) => ({
+                input_matrix,
+                instances: instances.map(({ input_instance }) => ({
+                  input_instance,
+                })),
+              })
+            ),
+          })}
+        `,
+      },
+    ],
+  });
+
+  const [first] = choices;
+  const instance_patterns = first.message.content;
+
+  console.debug("instance_patterns:");
+  console.debug(instance_patterns);
+
+  return { instance_patterns };
+}
+
 async function instances({
   instance_patterns,
   train_dataset,
@@ -194,4 +246,4 @@ async function output_instance({
   return { output_instance };
 }
 
-module.exports = { instances, value, output_instance };
+module.exports = { instance_patterns, instances, value, output_instance };

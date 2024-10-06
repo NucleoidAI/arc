@@ -84,13 +84,13 @@ module.exports = {
         )}
       `;
     },
+  },
+  visualizer: {
     instance_patterns: () => {
       return `
         ${arc}
       `;
     },
-  },
-  visualizer: {
     instances: () => {
       return `
         ${arc}

@@ -1,77 +1,83 @@
 const _3aa6fb7a = {
   patterns:
-    "To analyze the patterns between the input_matrix and output_matrix in the given train_dataset, we need to identify any transformations or rules applied to the input_matrix to produce the output_matrix. Let's examine the provided matrices:\n" +
+    "To analyze the given train dataset, we need to identify patterns and transformations between the input_matrix and output_matrix. Let's break down each example:\n" +
     "\n" +
-    "### Pattern Analysis:\n" +
+    "### Example 1:\n" +
     "\n" +
-    "1. **Observation of Changes:**\n" +
-    "   - In both examples, the number '8' is present in both the input and output matrices, forming specific shapes or lines.\n" +
-    "   - The transformation involves the addition of the number '1' in specific positions in the output_matrix.\n" +
+    "**Input Matrix:**\n" +
+    "```\n" +
+    "[[0,0,0,0,0,0,0],\n" +
+    " [0,8,0,0,0,0,0],\n" +
+    " [0,8,8,0,0,0,0],\n" +
+    " [0,0,0,0,8,8,0],\n" +
+    " [0,0,0,0,0,8,0],\n" +
+    " [0,0,0,0,0,0,0],\n" +
+    " [0,0,0,0,0,0,0]]\n" +
+    "```\n" +
     "\n" +
-    "2. **Rule Identification:**\n" +
-    "   - **Rule 1:** The number '1' is added adjacent to the number '8' in the output_matrix.\n" +
-    "   - **Rule 2:** The number '1' is placed in a position where it is directly next to an '8' that is part of a vertical or horizontal line of '8's.\n" +
+    "**Output Matrix:**\n" +
+    "```\n" +
+    "[[0,0,0,0,0,0,0],\n" +
+    " [0,8,1,0,0,0,0],\n" +
+    " [0,8,8,0,0,0,0],\n" +
+    " [0,0,0,0,8,8,0],\n" +
+    " [0,0,0,0,1,8,0],\n" +
+    " [0,0,0,0,0,0,0],\n" +
+    " [0,0,0,0,0,0,0]]\n" +
+    "```\n" +
     "\n" +
-    "3. **Shape and Structure:**\n" +
-    "   - The number '8' forms lines or segments in the input_matrix.\n" +
-    "   - The number '1' is added to extend or highlight these lines in the output_matrix.\n" +
+    "**Analysis:**\n" +
+    "- The input matrix contains two distinct clusters of the number '8'.\n" +
+    "- In the output matrix, a '1' is added adjacent to the first '8' in the first cluster (at position [1,2]) and adjacent to the last '8' in the second cluster (at position [4,4]).\n" +
     "\n" +
-    "### Detailed Analysis of Each Example:\n" +
+    "### Example 2:\n" +
     "\n" +
-    "- **First Example:**\n" +
-    "  - **Input Matrix:**\n" +
-    "    ```\n" +
-    "    [0,0,0,0,0,0,0]\n" +
-    "    [0,8,0,0,0,0,0]\n" +
-    "    [0,8,8,0,0,0,0]\n" +
-    "    [0,0,0,0,8,8,0]\n" +
-    "    [0,0,0,0,0,8,0]\n" +
-    "    [0,0,0,0,0,0,0]\n" +
-    "    [0,0,0,0,0,0,0]\n" +
-    "    ```\n" +
-    "  - **Output Matrix:**\n" +
-    "    ```\n" +
-    "    [0,0,0,0,0,0,0]\n" +
-    "    [0,8,1,0,0,0,0]\n" +
-    "    [0,8,8,0,0,0,0]\n" +
-    "    [0,0,0,0,8,8,0]\n" +
-    "    [0,0,0,0,1,8,0]\n" +
-    "    [0,0,0,0,0,0,0]\n" +
-    "    [0,0,0,0,0,0,0]\n" +
-    "    ```\n" +
-    "  - **Transformation:** The number '1' is added to the right of the first '8' in the second row and to the left of the '8' in the fifth row.\n" +
+    "**Input Matrix:**\n" +
+    "```\n" +
+    "[[0,0,0,0,8,8,0],\n" +
+    " [0,0,0,0,0,8,0],\n" +
+    " [0,0,8,0,0,0,0],\n" +
+    " [0,0,8,8,0,0,0],\n" +
+    " [0,0,0,0,0,0,0],\n" +
+    " [0,0,0,0,8,0,0],\n" +
+    " [0,0,0,8,8,0,0]]\n" +
+    "```\n" +
     "\n" +
-    "- **Second Example:**\n" +
-    "  - **Input Matrix:**\n" +
-    "    ```\n" +
-    "    [0,0,0,0,8,8,0]\n" +
-    "    [0,0,0,0,0,8,0]\n" +
-    "    [0,0,8,0,0,0,0]\n" +
-    "    [0,0,8,8,0,0,0]\n" +
-    "    [0,0,0,0,0,0,0]\n" +
-    "    [0,0,0,0,8,0,0]\n" +
-    "    [0,0,0,8,8,0,0]\n" +
-    "    ```\n" +
-    "  - **Output Matrix:**\n" +
-    "    ```\n" +
-    "    [0,0,0,0,8,8,0]\n" +
-    "    [0,0,0,0,1,8,0]\n" +
-    "    [0,0,8,1,0,0,0]\n" +
-    "    [0,0,8,8,0,0,0]\n" +
-    "    [0,0,0,0,0,0,0]\n" +
-    "    [0,0,0,1,8,0,0]\n" +
-    "    [0,0,0,8,8,0,0]\n" +
-    "    ```\n" +
-    "  - **Transformation:** The number '1' is added to the left of the '8' in the second row, to the right of the '8' in the third row, and to the left of the '8' in the sixth row.\n" +
+    "**Output Matrix:**\n" +
+    "```\n" +
+    "[[0,0,0,0,8,8,0],\n" +
+    " [0,0,0,0,1,8,0],\n" +
+    " [0,0,8,1,0,0,0],\n" +
+    " [0,0,8,8,0,0,0],\n" +
+    " [0,0,0,0,0,0,0],\n" +
+    " [0,0,0,1,8,0,0],\n" +
+    " [0,0,0,8,8,0,0]]\n" +
+    "```\n" +
     "\n" +
-    "### Summary of Findings:\n" +
+    "**Analysis:**\n" +
+    "- The input matrix contains three distinct clusters of the number '8'.\n" +
+    "- In the output matrix, a '1' is added adjacent to the first '8' in the first cluster (at position [1,4]), adjacent to the first '8' in the second cluster (at position [2,3]), and adjacent to the first '8' in the third cluster (at position [5,3]).\n" +
     "\n" +
-    "- The transformation from input_matrix to output_matrix involves adding the number '1' adjacent to existing '8's.\n" +
-    "- The placement of '1' is strategic, often extending or highlighting the line of '8's.\n" +
-    "- The rule is consistent across both examples, indicating a clear pattern of transformation.\n" +
+    "### Patterns and Rules:\n" +
     "\n" +
-    "These observations and rules can be used to predict or generate the output_matrix from a given input_matrix following the identified pattern.",
-  training_dataset: {
+    "1. **Cluster Identification:**\n" +
+    "   - The number '8' forms clusters in the input matrix. A cluster is defined as a group of '8's that are connected either horizontally or vertically.\n" +
+    "\n" +
+    "2. **Transformation Rule:**\n" +
+    "   - For each cluster of '8's, a '1' is added adjacent to the first '8' in the cluster. The '1' is placed in the first available empty space (0) adjacent to the '8'.\n" +
+    "\n" +
+    "3. **Placement of '1':**\n" +
+    "   - The '1' is placed in the first available position when traversing the matrix from top to bottom and left to right.\n" +
+    "\n" +
+    "### Shapes and Formal Names:\n" +
+    "\n" +
+    '- **Clusters of \'8\':** These can be considered as "rectangular blocks" or "connected components" in the matrix.\n' +
+    "- **Addition of '1':** The '1' acts as a \"marker\" or \"indicator\" adjacent to the cluster.\n" +
+    "\n" +
+    "### Summary:\n" +
+    "\n" +
+    "The transformation from the input_matrix to the output_matrix involves identifying clusters of the number '8' and adding a '1' adjacent to the first '8' in each cluster. The '1' is placed in the first available empty space adjacent to the '8', following a top-to-bottom, left-to-right traversal. This pattern is consistent across the examples provided.",
+  train_dataset: {
     dataset: [
       {
         input_matrix: [
@@ -113,14 +119,8 @@ const _3aa6fb7a = {
               [0, 0, 0, 0, 0, 0, 0],
               [0, 0, 0, 0, 0, 0, 0],
             ],
-            nuc: "var obj0 = new Obj(); obj0.center = 8; obj0.left = 8; obj0.right = 8; obj0;",
-            instance_value: {
-              id: "obj0",
-              center: 8,
-              left: 8,
-              right: 8,
-              extension: 1,
-            },
+            nuc: "var obj0 = new Obj(); obj0.cluster = 8; obj0;",
+            instance_value: { id: "obj0", cluster: 8, marker: 1 },
           },
           {
             instance_name: "obj1",
@@ -142,14 +142,8 @@ const _3aa6fb7a = {
               [0, 0, 0, 0, 0, 0, 0],
               [0, 0, 0, 0, 0, 0, 0],
             ],
-            nuc: "var obj1 = new Obj(); obj1.center = 8; obj1.left = 8; obj1.right = 8; obj1;",
-            instance_value: {
-              id: "obj1",
-              center: 8,
-              left: 8,
-              right: 8,
-              extension: 1,
-            },
+            nuc: "var obj1 = new Obj(); obj1.cluster = 8; obj1;",
+            instance_value: { id: "obj1", cluster: 8, marker: 1 },
           },
         ],
       },
@@ -193,14 +187,8 @@ const _3aa6fb7a = {
               [0, 0, 0, 0, 0, 0, 0],
               [0, 0, 0, 0, 0, 0, 0],
             ],
-            nuc: "var obj0 = new Obj(); obj0.center = 8; obj0.left = 8; obj0.right = 8; obj0;",
-            instance_value: {
-              id: "obj0",
-              center: 8,
-              left: 8,
-              right: 8,
-              extension: 1,
-            },
+            nuc: "var obj0 = new Obj(); obj0.cluster = 8; obj0;",
+            instance_value: { id: "obj0", cluster: 8, marker: 1 },
           },
           {
             instance_name: "obj1",
@@ -222,14 +210,8 @@ const _3aa6fb7a = {
               [0, 0, 0, 0, 0, 0, 0],
               [0, 0, 0, 0, 0, 0, 0],
             ],
-            nuc: "var obj1 = new Obj(); obj1.center = 8; obj1.left = 8; obj1.right = 8; obj1;",
-            instance_value: {
-              id: "obj1",
-              center: 8,
-              left: 8,
-              right: 8,
-              extension: 1,
-            },
+            nuc: "var obj1 = new Obj(); obj1.cluster = 8; obj1;",
+            instance_value: { id: "obj1", cluster: 8, marker: 1 },
           },
           {
             instance_name: "obj2",
@@ -251,21 +233,15 @@ const _3aa6fb7a = {
               [0, 0, 0, 1, 8, 0, 0],
               [0, 0, 0, 8, 8, 0, 0],
             ],
-            nuc: "var obj2 = new Obj(); obj2.center = 8; obj2;",
-            instance_value: {
-              id: "obj2",
-              center: 8,
-              left: 0,
-              right: 0,
-              extension: 1,
-            },
+            nuc: "var obj2 = new Obj(); obj2.cluster = 8; obj2;",
+            instance_value: { id: "obj2", cluster: 8, marker: 1 },
           },
         ],
       },
     ],
     declarations: [
-      "class Obj { constructor() { this.center = 0; this.left = 0; this.right = 0; this.extension = 0; }}",
-      "if($Obj.center === 8) { $Obj.extension = 1; }",
+      "class Obj { constructor() { this.cluster = 0; this.marker = 0; }}",
+      "if($Obj.cluster === 8) { $Obj.marker = 1; }",
     ],
   },
 };
