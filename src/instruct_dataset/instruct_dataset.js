@@ -31,10 +31,12 @@ module.exports = {
     instances: () => {
       return `
         ${arc}
+        ${declarations}
         ${instances}
         instruct_dataset:
         ${JSON.stringify(
-          dataset.map(({ dataset }) => ({
+          dataset.map(({ declarations, dataset }) => ({
+            declarations,
             dateset: dataset.map(
               ({ input_matrix, output_matrix, instances }) => ({
                 input_matrix,
@@ -86,11 +88,6 @@ module.exports = {
     },
   },
   visualizer: {
-    instance_patterns: () => {
-      return `
-        ${arc}
-      `;
-    },
     instances: () => {
       return `
         ${arc}
@@ -145,21 +142,9 @@ module.exports = {
       return `
         ${arc}
         ${instances}
+        ${declarations}
         instruct_dataset:
-        ${JSON.stringify(
-          dataset.map(({ dataset, declarations }) => ({
-            declarations,
-            dateset: dataset.map(({ instances }) => ({
-              instances: instances.map(
-                ({ input_instance, output_instance, instance_value }) => ({
-                  input_instance,
-                  output_instance,
-                  instance_value,
-                })
-              ),
-            })),
-          }))
-        )}
+        ${JSON.stringify(dataset)}
       `;
     },
   },

@@ -2,64 +2,9 @@ const nucleoid = require("./nucleoid");
 const openai = require("./openai");
 const Matrix = require("../lib/Matrix");
 const instruct_dataset = require("../instruct_dataset");
+const Markdown = require("../lib/Markdown");
 
-async function instance_patterns({ train_dataset }) {
-  console.log("Analyzing instance_patterns...");
-
-  const { choices } = await openai.chat({
-    max_tokens: 5012,
-    response_format: {
-      type: "text",
-    },
-    messages: [
-      {
-        role: "system",
-        content: `
-          - Provide detailed analysis of each example 
-          - Provide logical explanation of patterns found in between input_matrix and instances in given train_dataset for redrawing
-          - Provide all rules found in patterns for redrawing
-          - Provide complete details of found shapes and their parts also their formal names
-          - Provide complete summery of findings
-          - Provide only clear patterns and if found pattern is not certain, skip it without mentioning
-        `,
-      },
-      {
-        role: "system",
-        content: instruct_dataset.visualizer.instance_patterns(),
-      },
-      {
-        role: "user",
-        content: `
-          train_dataset:
-          ${JSON.stringify({
-            dataset: train_dataset.dataset.map(
-              ({ input_matrix, instances }) => ({
-                input_matrix,
-                instances: instances.map(({ input_instance }) => ({
-                  input_instance,
-                })),
-              })
-            ),
-          })}
-        `,
-      },
-    ],
-  });
-
-  const [first] = choices;
-  const instance_patterns = first.message.content;
-
-  console.debug("instance_patterns:");
-  console.debug(instance_patterns);
-
-  return { instance_patterns };
-}
-
-async function instances({
-  instance_patterns,
-  train_dataset,
-  test_input_matrix,
-}) {
+async function instances({ train_dataset, test_input_matrix }) {
   console.log("Analyzing test_input_matrix...");
   console.log("");
 
@@ -68,13 +13,24 @@ async function instances({
   console.debug("");
 
   const { choices } = await openai.chat({
+    response_format: { type: "text" },
+    max_tokens: 10000,
     messages: [
       {
         role: "system",
         content: `
-          - Extract each input_instance from given input_matrix based on given instance_patterns in train_dataset
-          - Use instruct_dataset and train_dataset as a reference
-          - Return in JSON format as { "instances": [ { input_instance: [INPUT_INSTANCE] } ] }
+          Chain-of-Thought Flow:
+          For how to extract each input_instance from given input_matrix based on given instance_patterns:
+            1. Provide detailed analysis of each input_instance in instances of given train_dataset with going through
+            2. Provide logical explanation of patterns found in between input_matrix and instances in given train_dataset
+            4. Provide complete details of found shapes and their parts also their formal names in given train_dataset
+            3. Provide all rules found in patterns for extracting in given train_dataset
+            5. Provide complete summary of findings in given train_dataset
+            6. Explain how to extract from given input_matrix
+            7. Find all instances in given input_matrix based on findings with detailed analysis
+            8. Generate potential solutions
+            9. Evaluate and select solutions
+            10. Extract each input_instance from given input_matrix based on findings in train_dataset and return in JSON format as { "instances": [ { input_instance: [INPUT_INSTANCE] } ] }
         `,
       },
       {
@@ -84,14 +40,14 @@ async function instances({
           - input_instance must contain only 1 instance of found pattern
           - input_instance must be filled rest of empty spaces with 0s
           - input_instance must have in same dimension with its input_matrix
+          - Provide only clear patterns and if found pattern is not certain, skip it without mentioning
+          - Each Chain-of-Thought step must be complete and detailed
           ${instruct_dataset.visualizer.instances()}
         `,
       },
       {
         role: "user",
         content: `
-          instance_patterns:
-          ${instance_patterns}
           train_dataset:
           ${JSON.stringify({
             dateset: train_dataset.dataset.map(
@@ -110,7 +66,8 @@ async function instances({
     ],
   });
   const [first] = choices;
-  const { instances } = JSON.parse(first.message.content);
+  console.debug(first.message.content);
+  const { instances } = Markdown.json(first.message.content);
 
   console.debug("Test instances:");
   instances.forEach((i) => {
@@ -204,7 +161,7 @@ async function output_instance({
         content: `
           - Generate output_instance for given input_instance and instance_value based on given patterns and declarations
           - Use instruct_dataset and train_dataset as a reference 
-          - Return in JSON format as { output_instance: [OUTPUT_INSTANCE] ] }`,
+          - Return in JSON format as { output_instance: [OUTPUT_INSTANCE] }`,
       },
       {
         role: "system",
@@ -216,18 +173,7 @@ async function output_instance({
           patterns:
           ${patterns}
           train_dataset:
-          ${JSON.stringify({
-            declarations: train_dataset.declarations,
-            dateset: train_dataset.dataset.map(({ instances }) => ({
-              instances: instances.map(
-                ({ input_instance, output_instance, instance_value }) => ({
-                  input_instance,
-                  output_instance,
-                  instance_value,
-                })
-              ),
-            })),
-          })}
+          ${JSON.stringify(train_dataset)}
           input_instance:
           ${JSON.stringify(test_input_instance)}
           instance_value:
@@ -246,4 +192,4 @@ async function output_instance({
   return { output_instance };
 }
 
-module.exports = { instance_patterns, instances, value, output_instance };
+module.exports = { instances, value, output_instance };

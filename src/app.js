@@ -52,7 +52,7 @@ const debug = require("./debug");
 const {
   train,
   test: [{ input: test_input_matrix, output: test_output_matrix }],
-} = require("./data/training/3aa6fb7a.json"); // 0ca9ddb6.json
+} = require("./data/training/0ca9ddb6.json"); // 0ca9ddb6.json
 const Matrix = require("./lib/Matrix");
 
 const train_dataset = {
@@ -113,15 +113,10 @@ async function start() {
   const test_session_id = uuid();
   const test_instances = [];
 
-  const { instance_patterns } = await visualizer.instance_patterns({
-    train_dataset,
-  });
-
   console.log("Initializing Nucleoid session with declarations...");
   await nucleoid.run(test_session_id, train_dataset.declarations.join("\n"));
 
   const { instances } = await visualizer.instances({
-    instance_patterns,
     train_dataset,
     test_input_matrix,
   });

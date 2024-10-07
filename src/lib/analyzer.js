@@ -84,7 +84,12 @@ async function declarations({ train_dataset, patterns }) {
   return { declarations };
 }
 
-async function instances({ patterns, input_matrix, output_matrix }) {
+async function instances({
+  patterns,
+  declarations,
+  input_matrix,
+  output_matrix,
+}) {
   console.log("Extracting instances...");
 
   const { choices } = await openai.chat({
@@ -119,11 +124,12 @@ async function instances({ patterns, input_matrix, output_matrix }) {
         role: "user",
         content: `
           patterns:
-          ${patterns}
-          input_matrix:
-          ${JSON.stringify(input_matrix)}
-          output_matrix:
-          ${JSON.stringify(output_matrix)}
+          ${patterns}          
+          train_dataset:
+          ${JSON.stringify({
+            declarations,
+            dataset: [{ input_matrix, output_matrix }],
+          })}
         `,
       },
     ],
