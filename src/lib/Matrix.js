@@ -1,3 +1,11 @@
+let _rows = 0;
+let _cols = 0;
+
+function init(rows, cols) {
+  _rows = rows;
+  _cols = cols;
+}
+
 function merge(...matrices) {
   const numRows = matrices[0].length;
   const numCols = matrices[0][0].length;
@@ -39,10 +47,38 @@ function subtract(matrix1, matrix2) {
   return result;
 }
 
+function encode(matrix) {
+  let result = [];
+
+  for (let i = 0; i < matrix.length; i++) {
+    for (let j = 0; j < matrix[i].length; j++) {
+      if (matrix[i][j] !== 0) {
+        result.push(`${matrix[i][j]}@${i},${j}`);
+      }
+    }
+  }
+
+  return result.join("-");
+}
+
+function decode(string) {
+  let matrix = Array.from({ length: _rows }, () => Array(_cols).fill(0));
+
+  const entries = string.split("-");
+
+  entries.forEach((entry) => {
+    const [value, position] = entry.split("@");
+    const [row, col] = position.split(",").map(Number);
+    matrix[row][col] = Number(value);
+  });
+
+  return matrix;
+}
+
 function toString(matrix) {
   matrix.forEach((row) => {
     console.debug(`[${row.join(",")}]`);
   });
 }
 
-module.exports = { merge, subtract, toString };
+module.exports = { init, merge, encode, decode, subtract, toString };
