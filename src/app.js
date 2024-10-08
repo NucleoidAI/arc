@@ -51,28 +51,41 @@ const debug = require("./debug");
 
 const {
   train,
-  test: [{ input: test_input_matrix, output: test_output_matrix }],
-} = require("./data/training/0ca9ddb6.json"); // 0ca9ddb6.json
+  test: [{ input, output: test_output_matrix }],
+} = require("./data/training/3aa6fb7a.json"); // 0ca9ddb6.json
+
 const Matrix = require("./lib/Matrix");
+
+const test_input_matrix = Matrix.encode(input);
 
 const train_dataset = {
   dataset: train.map(({ input, output }) => ({
-    input_matrix: input,
-    output_matrix: output,
+    input_matrix: Matrix.encode(input),
+    output_matrix: Matrix.encode(output),
     instances: [],
   })),
 };
 
+// For running instruct dataset
+// const { dataset } = require("./instruct_dataset/dataset.core.json");
+// Matrix.init(dataset[0].input_matrix.length, dataset[0].output_matrix.length);
+// const train_dataset = {
+//   dataset: dataset.map(({ input_matrix, output_matrix }) => ({
+//     input_matrix: Matrix.encode(input_matrix),
+//     output_matrix: Matrix.encode(output_matrix),
+//     instances: [],
+//   })),
+// };
+
 async function start() {
   const train_session_id = uuid();
 
-  const { patterns } = await analyzer.patterns({ train_dataset });
+  const { statements } = await analyzer.patterns({ train_dataset });
+  train_dataset.statements = statements;
 
   const { declarations } = await analyzer.declarations({
-    patterns,
     train_dataset,
   });
-
   train_dataset.declarations = declarations;
 
   console.log("Creating declarations in Nucleoid...");
@@ -82,7 +95,7 @@ async function start() {
     const { input_matrix, output_matrix } = dataset;
 
     const { instances } = await analyzer.instances({
-      patterns,
+      declarations,
       input_matrix,
       output_matrix,
     });

@@ -1,6 +1,18 @@
 {
+  "statements": [
+    "The number '8' is at initial position at line.",
+    "Orientation of line is vertical or horizontal.",
+    "If orientation is horizontal and initial position is left then extension is right.",
+    "If orientation is horizontal and initial position is right then extension is left.",
+    "If orientation is vertical and initial position is up then extension is down.",
+    "If orientation is vertical and initial position is down then extension is up."
+  ],
   "declarations": [
-    "class Obj { constructor(orientation, initialPosition) { this.orientation = orientation; this.initialPosition = initialPosition }}"
+    "class Obj { constructor(orientation, initialPosition) { this.orientation = orientation; this.initialPosition = initialPosition }}",
+    "if($Obj.orientation === 'horizontal' && $Obj.initialPosition === 'left') { $Obj.extension = 'right' }",
+    "if($Obj.orientation === 'horizontal' && $Obj.initialPosition === 'right') { $Obj.extension = 'left' }",
+    "if($Obj.orientation === 'vertical' && $Obj.initialPosition === 'up') { $Obj.extension = 'down' }",
+    "if($Obj.orientation === 'vertical' && $Obj.initialPosition === 'down') { $Obj.extension = 'up' }"
   ],
   "dataset": [
     {
@@ -48,7 +60,7 @@
             [0, 0, 0, 0, 0, 0, 0, 0]
           ],
           "nuc": "var obj5262 = new Obj('horizontal', 'left')",
-          "instance_value": {"id":"obj9959","orientation":"horizontal","initialPosition":"left"}
+          "instance_value": {"id":"obj9959","orientation":"horizontal","initialPosition":"left","extension":"right"}
         },
         {
           "instance_name": "obj7957",
@@ -73,7 +85,7 @@
             [0, 0, 0, 0, 0, 0, 0, 0]
           ],
           "nuc": "var obj7957 = new Obj('horizontal', 'right')",
-          "instance_value": {"id":"obj7957","orientation":"horizontal","initialPosition":"right"}
+          "instance_value": {"id":"obj7957","orientation":"horizontal","initialPosition":"right","extension":"left"}
         }
       ]
     },
@@ -121,8 +133,8 @@
             [8, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]
           ],
-          "nuc": "var obj8547 = new Obj('vertical', 'bottom')",
-          "instance_value": {"id":"obj8547","orientation":"vertical","initialPosition":"bottom"}
+          "nuc": "var obj8547 = new Obj('vertical', 'down')",
+          "instance_value": {"id":"obj8547","orientation":"vertical","initialPosition":"down","extension":"up"}
         },
         {
           "instance_name": "obj5705",
@@ -147,7 +159,7 @@
             [0, 0, 0, 0, 0, 0, 0, 0]
           ],
           "nuc": "var obj5705 = new Obj('horizontal', 'left')",
-          "instance_value": {"id":"obj5705","orientation":"horizontal","initialPosition":"left"}
+          "instance_value": {"id":"obj5705","orientation":"horizontal","initialPosition":"left","extension":"right"}
         }
       ]
     },
@@ -196,7 +208,7 @@
             [0, 0, 0, 0, 0, 0, 0, 0]
           ],
           "nuc": "var obj6898 = new Obj('horizontal', 'right')",
-          "instance_value": {"id":"obj6898","orientation":"horizontal","initialPosition":"right"}
+          "instance_value": {"id":"obj6898","orientation":"horizontal","initialPosition":"right","extension":"left"}
         },
         {
           "instance_name": "obj6941",
@@ -220,8 +232,8 @@
             [0, 6, 0, 0, 0, 0, 0, 0],
             [0, 8, 0, 0, 0, 0, 0, 0]
           ],
-          "nuc": "var obj6941 = new Obj('vertical', 'bottom')",
-          "instance_value": {"id":"obj6941","orientation":"vertical","initialPosition":"bottom"}
+          "nuc": "var obj6941 = new Obj('vertical', 'down')",
+          "instance_value": {"id":"obj6941","orientation":"vertical","initialPosition":"down","extension":"up"}
         },
         {
           "instance_name": "obj8615",
@@ -245,8 +257,8 @@
             [0, 0, 0, 0, 0, 0, 6, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]
           ],
-          "nuc": "var obj8615 = new Obj('vertical', 'top')",
-          "instance_value": {"id":"obj8615","orientation":"vertical","initialPosition":"top"}
+          "nuc": "var obj8615 = new Obj('vertical', 'up')",
+          "instance_value": {"id":"obj8615","orientation":"vertical","initialPosition":"up","extension":"down"}
         }
       ]
     }

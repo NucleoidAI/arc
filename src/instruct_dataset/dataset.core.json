@@ -1,4 +1,7 @@
 {
+  "patterns": [
+    "If there are three consecutive 9s in a vertical or horizontal line, add 1 at a specific offset position."
+  ],
   "declarations": [
     "class Obj { constructor() { this.center = 0; this.left = 0; this.right = 0; this.extension = 0; }}",
     "if($Obj.left === 9 && $Obj.right === 9 && $Obj.center === 9) { $Obj.extension = 1; }"

@@ -1,4 +1,5 @@
 const OpenAI = require("openai");
+const instruct_dataset = require("../instruct_dataset");
 require("dotenv").config();
 
 const openai = new OpenAI({
@@ -13,9 +14,25 @@ async function chat({
   top_p = 1,
   frequency_penalty = 0,
   presence_penalty = 0,
-  response_format = { type: "json_object" },
+  response_format = { type: "text" },
 }) {
-  // console.info(messages);
+  messages.unshift({
+    role: "system",
+    content: `
+      - Conduct comprehensive analysis for given task before working on given task
+      - Consider items in given analysis sequentially while analyzing
+      - Apply given instructions if any
+      - Provide final return in given return_format
+    `,
+  });
+  messages.unshift({
+    role: "system",
+    content: `
+      Motto: ALWAYS THINK ALOUD
+    `,
+  });
+
+  console.info(JSON.stringify(messages));
   return openai.chat.completions.create({
     model,
     messages,

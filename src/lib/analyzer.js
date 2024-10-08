@@ -2,27 +2,13 @@ const openai = require("./openai");
 const Matrix = require("./Matrix");
 const instruct_dataset = require("../instruct_dataset");
 const nucleoid = require("./nucleoid");
+const Markdown = require("./Markdown");
 
 async function patterns({ train_dataset }) {
   console.log("Analyzing patterns...");
 
   const { choices } = await openai.chat({
-    max_tokens: 5012,
-    response_format: {
-      type: "text",
-    },
     messages: [
-      {
-        role: "system",
-        content: `
-          - Provide detailed analysis of each example 
-          - Provide logical explanation of patterns found in between input_matrix and output_matrix in given train_dataset for redrawing
-          - Provide all rules found in patterns for redrawing
-          - Provide complete details of found shapes and their parts also their formal names
-          - Provide complete summery of findings
-          - Provide only clear patterns and if found pattern is not certain, skip it without mentioning
-        `,
-      },
       {
         role: "system",
         content: instruct_dataset.analyzer.patterns(),
@@ -30,6 +16,21 @@ async function patterns({ train_dataset }) {
       {
         role: "user",
         content: `
+          analysis:
+          - Provide detailed analysis of each example
+          - Explain shapes, objects etc. in each example
+          - Find all relationship between shapes, objects etc. in each example
+          - Find all patterns between shapes, objects etc. in each example
+          - Provide all rules found in patterns
+          - Provide complete details of found shapes and their parts also their formal names
+          - Provide logical explanation of patterns found in between input_matrix and output_matrix in given train_dataset
+          - Provide complete summery of findings
+          instructions:
+          - Provide only clear patterns and if found pattern is not certain, skip it without mentioning
+          task:
+          - Find logical statements based on patterns in between input_matrix and output_matrix in given train_dataset
+          return_format:
+          { statements: [statements] }
           train_dataset:
           ${JSON.stringify(train_dataset)}
         `,
@@ -38,27 +39,19 @@ async function patterns({ train_dataset }) {
   });
 
   const [first] = choices;
-  const patterns = first.message.content;
+  const { statements } = Markdown.json(first.message.content);
 
-  console.debug("patterns:");
-  console.debug(patterns);
+  console.debug("statements:");
+  console.debug(statements);
 
-  return { patterns };
+  return { statements };
 }
 
-async function declarations({ train_dataset, patterns }) {
+async function declarations({ train_dataset }) {
   console.log("Analyzing declarations...");
 
   const { choices } = await openai.chat({
     messages: [
-      {
-        role: "system",
-        content: `
-          - Identify declarations for given train_dataset in Nucleoid Syntax
-          - Use instruct_dataset as a reference
-          - Return in JSON format as { declarations: [NUC_DECLARATIONS] }
-        `,
-      },
       {
         role: "system",
         content: instruct_dataset.analyzer.declarations(),
@@ -66,8 +59,10 @@ async function declarations({ train_dataset, patterns }) {
       {
         role: "user",
         content: `
-          patterns:
-          ${patterns}
+          task:
+          Identify declarations for given statement and train_dataset in Nucleoid Syntax
+          return_format:
+          { declarations: [NUC_DECLARATIONS] }
           train_dataset:
           ${JSON.stringify(train_dataset)}
         `,
@@ -76,7 +71,7 @@ async function declarations({ train_dataset, patterns }) {
   });
 
   const [first] = choices;
-  const { declarations } = JSON.parse(first.message.content);
+  const { declarations } = Markdown.json(first.message.content);
 
   console.debug("declarations:");
   console.debug(declarations);
@@ -100,7 +95,7 @@ async function instances({
           - Extract each input_instance from given input_matrix based on given patterns
           - Extract each output_instance from given output_matrix based on given patterns
           - Use instruct_dataset as a reference
-          - Return in JSON format as { instances: [ { input_instance: [INPUT_INSTANCES], output_instance: [OUTPUT_INSTANCES] } ] }
+          - Return in JSON format as { instances: [ { input_instance: "INPUT_INSTANCES", output_instance: "OUTPUT_INSTANCES" } ] }
         `,
       },
       {
