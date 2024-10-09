@@ -3,6 +3,7 @@ const Matrix = require("./Matrix");
 const instruct_dataset = require("../instruct_dataset");
 const nucleoid = require("./nucleoid");
 const Markdown = require("./Markdown");
+const Zoom = require("./Zoom");
 
 async function statements({ train_dataset }) {
   console.log("Analyzing patterns...");
@@ -16,7 +17,7 @@ async function statements({ train_dataset }) {
       {
         role: "user",
         content: `
-          analysis:
+          task:
           - Provide detailed analysis of each example
           - Explain shapes, objects etc. in each example
           - Find all relationship between shapes, objects etc. in each example
@@ -27,8 +28,7 @@ async function statements({ train_dataset }) {
           - Provide complete summery of findings
           instructions:
           - Provide only clear patterns and if found pattern is not certain, skip it without mentioning
-          task:
-          - Find logical statements based on patterns in between input_matrix and output_matrix in given train_dataset
+          - Provide all logical statements based on patterns found in between input_matrix and output_matrix in given train_dataset
           train_dataset:
           ${JSON.stringify(train_dataset)}
           return_format:
@@ -122,10 +122,30 @@ async function instances({
   const [first] = choices;
   const { instances } = Markdown.json(first.message.content);
 
-  instances.forEach((i) => {
-    Matrix.toString(i.input_instance);
+  instances.forEach((instance) => {
+    const { input_instance, output_instance } = instance;
+    instance.input_object = Zoom.focus(input_instance);
+    instance.output_object = Zoom.focus(output_instance);
+  });
+
+  instances.forEach((instance) => {
+    Matrix.toString(instance.input_instance);
+    console.debug(
+      JSON.stringify({
+        x_position: instance.input_object.x_position,
+        y_position: instance.input_object.y_position,
+      })
+    );
+    Matrix.toString(instance.input_object.matrix);
     console.debug("");
-    Matrix.toString(i.output_instance);
+    Matrix.toString(instance.output_instance);
+    console.debug(
+      JSON.stringify({
+        x_position: instance.output_object.x_position,
+        y_position: instance.output_object.y_position,
+      })
+    );
+    Matrix.toString(instance.output_object.matrix);
     console.debug("--");
   });
   console.log("");
@@ -138,6 +158,8 @@ async function value({
   instance_name,
   statements,
   declarations,
+  input_object,
+  output_object,
   input_instance,
   output_instance,
 }) {
@@ -160,6 +182,10 @@ async function value({
           ${statements.join("\n")}
           declarations:
           ${declarations.join("\n")}
+          input_object:
+          ${JSON.stringify(input_object)}
+          output_object:
+          ${JSON.stringify(output_object)}
           input_instance:
           ${JSON.stringify(input_instance)}
           output_instance:
@@ -172,7 +198,7 @@ async function value({
   });
 
   const [first] = choices;
-  const { nuc } = JSON.parse(first.message.content);
+  const { nuc } = Markdown.json(first.message.content);
 
   console.log("Creating instance in Nucleoid...");
   const instance_value = await nucleoid.run(train_session_id, nuc);

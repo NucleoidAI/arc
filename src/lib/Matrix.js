@@ -1,5 +1,3 @@
-/* eslint-disable no-unreachable */
-
 let _rows = 0;
 let _cols = 0;
 
@@ -49,10 +47,18 @@ function subtract(matrix1, matrix2) {
   return result;
 }
 
-// Experimental encoding/decoding
 function encode(matrix) {
   return matrix;
+}
 
+function decode(string) {
+  return string;
+}
+
+// Experimental encoding/decoding
+/* eslint-disable no-unused-vars */
+
+function sparse_encode(matrix) {
   let result = [];
 
   for (let i = 0; i < matrix.length; i++) {
@@ -66,9 +72,7 @@ function encode(matrix) {
   return result.join("-");
 }
 
-function decode(string) {
-  return string;
-
+function sparse_decode(string) {
   let matrix = Array.from({ length: _rows }, () => Array(_cols).fill(0));
 
   const entries = string.split("-");

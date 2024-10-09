@@ -1,6 +1,7 @@
 const nucleoid = require("./nucleoid.md");
 const arc = require("./arc.md");
 const Matrix = require("../lib/Matrix");
+const Zoom = require("../lib/Zoom");
 
 const dataset = [
   require("./dataset.core.json"),
@@ -9,8 +10,8 @@ const dataset = [
 ].map(({ declarations, dataset }) => ({
   declarations,
   dataset: dataset.map(({ input_matrix, output_matrix, instances }) => ({
-    input_matrix: Matrix.encode(input_matrix),
-    output_matrix: Matrix.encode(output_matrix),
+    input_matrix,
+    output_matrix,
     instances: instances.map(
       ({
         instance_name,
@@ -22,6 +23,8 @@ const dataset = [
         instance_name,
         input_instance: Matrix.encode(input_instance),
         output_instance: Matrix.encode(output_instance),
+        input_object: Zoom.focus(input_instance),
+        output_object: Zoom.focus(output_instance),
         nuc,
         instance_value,
       })
@@ -36,9 +39,6 @@ module.exports = {
     statements: () => {
       return `
         ${arc}
-        ${nucleoid}
-        instruct_dataset:
-        ${JSON.stringify(dataset)}
       `;
     },
     declarations: () => {
@@ -62,9 +62,16 @@ module.exports = {
                 input_matrix,
                 output_matrix,
                 instances: instances.map(
-                  ({ input_instance, output_instance }) => ({
+                  ({
                     input_instance,
                     output_instance,
+                    input_object,
+                    output_object,
+                  }) => ({
+                    input_instance,
+                    output_instance,
+                    input_object,
+                    output_object,
                   })
                 ),
               })

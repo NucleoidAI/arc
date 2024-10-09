@@ -1,8 +1,8 @@
-# XARC
+# ARC
 
-- XARC consists of input_matrix and output_matrix
-- XARC matrix refers either to input_matrix or output_matrix
-- XARC matrix is rectangular, 2-dimensional arrays represented as sparse:
+- ARC consists of input_matrix and output_matrix
+- ARC matrix refers either to input_matrix or output_matrix
+- ARC matrix is rectangular, 2-dimensional arrays represented as sparse:
 
 Sparse Mode:
 - `1@3,2` Number 1 at 3 x-coordinate and 2 y-coordinate
@@ -15,9 +15,9 @@ Sparse Mode:
 }
 ```
 
-- Dimensions of XARC input matrix and output matrix are the same size
-- XARC matrix is in JSON format
-- In XARC matrix, any number from 1-9 can be used for object, 0 considered empty space
+- Dimensions of ARC input matrix and output matrix are the same size
+- ARC matrix is in JSON format
+- In ARC matrix, any number from 1-9 can be used for object, 0 considered empty space
 
 In train_dataset and instruct_dataset:
 - input_matrix is inserted matrix

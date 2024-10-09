@@ -47,7 +47,7 @@ const analyzer = require("./lib/analyzer");
 const visualizer = require("./lib/visualizer");
 const nucleoid = require("./lib/nucleoid");
 const { v4: uuid } = require("uuid");
-const debug = require("./debug");
+const debug = require("./debug"); // eslint-disable-line no-unused-vars
 
 const {
   train,
@@ -56,12 +56,12 @@ const {
 
 const Matrix = require("./lib/Matrix");
 
-const test_input_matrix = Matrix.encode(input);
+const test_input_matrix = input;
 
 const train_dataset = {
   dataset: train.map(({ input, output }) => ({
-    input_matrix: Matrix.encode(input),
-    output_matrix: Matrix.encode(output),
+    input_matrix: input,
+    output_matrix: output,
     instances: [],
   })),
 };
@@ -98,17 +98,25 @@ async function start() {
     const { instances } = await analyzer.instances({
       statements,
       declarations,
-      input_matrix: Matrix.encode(input_matrix),
-      output_matrix: Matrix.encode(output_matrix),
+      input_matrix,
+      output_matrix,
     });
 
-    for (const { input_instance, output_instance } of instances) {
+    for (const {
+      input_instance,
+      output_instance,
+      input_object,
+      output_object,
+    } of instances) {
       const instance_name = `obj${dataset.instances.length}`;
 
       const { nuc, instance_value } = await analyzer.value({
-        instance_name,
         train_session_id,
+        instance_name,
+        statements,
         declarations,
+        input_object,
+        output_object,
         input_instance,
         output_instance,
       });

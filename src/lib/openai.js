@@ -18,9 +18,8 @@ async function chat({
   messages.unshift({
     role: "system",
     content: `
-      - Conduct comprehensive analysis for given task before working on given task
-      - Consider items in given analysis sequentially while analyzing
-      - Apply given instructions if any
+      - Complete given tasks
+      - Follow given instructions while evaluating
       - Provide final result in given return_format
     `,
   });
