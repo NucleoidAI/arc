@@ -1,7 +1,5 @@
 const nucleoid = require("./nucleoid.md");
 const arc = require("./arc.md");
-const declarations = require("./declarations.md");
-const instances = require("./instances.md");
 const Matrix = require("../lib/Matrix");
 
 const dataset = [
@@ -34,13 +32,11 @@ const dataset = [
 module.exports = {
   nucleoid,
   arc,
-  declarations,
   analyzer: {
-    patterns: () => {
+    statements: () => {
       return `
         ${arc}
         ${nucleoid}
-        ${declarations}
         instruct_dataset:
         ${JSON.stringify(dataset)}
       `;
@@ -49,7 +45,6 @@ module.exports = {
       return `
         ${arc}
         ${nucleoid}
-        ${declarations}
         instruct_dataset:
         ${JSON.stringify(dataset)}
       `;
@@ -57,8 +52,7 @@ module.exports = {
     instances: () => {
       return `
         ${arc}
-        ${declarations}
-        ${instances}
+        ${nucleoid}
         instruct_dataset:
         ${JSON.stringify(
           dataset.map(({ declarations, dataset }) => ({
@@ -83,8 +77,6 @@ module.exports = {
       return `
         ${arc}
         ${nucleoid}
-        ${declarations}
-        ${instances}
         instruct_dataset:
         ${JSON.stringify(
           dataset.map(({ declarations, dataset }) => ({
@@ -117,7 +109,6 @@ module.exports = {
     instances: () => {
       return `
         ${arc}
-        ${instances}
         instruct_dataset:
         ${JSON.stringify(
           dataset.map(({ dataset }) => ({
@@ -135,8 +126,6 @@ module.exports = {
       return `
         ${arc}
         ${nucleoid}
-        ${declarations}
-        ${instances}
         instruct_dataset:
         ${JSON.stringify(
           dataset.map(({ declarations, dataset }) => ({
@@ -167,8 +156,6 @@ module.exports = {
     output_instance: () => {
       return `
         ${arc}
-        ${instances}
-        ${declarations}
         instruct_dataset:
         ${JSON.stringify(dataset)}
       `;

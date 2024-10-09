@@ -1,5 +1,4 @@
 const OpenAI = require("openai");
-const instruct_dataset = require("../instruct_dataset");
 require("dotenv").config();
 
 const openai = new OpenAI({
@@ -7,7 +6,7 @@ const openai = new OpenAI({
 });
 
 async function chat({
-  model = "gpt-4o-2024-08-06",
+  model = "gpt-4o-2024-08-06", // gpt-4o-mini-2024-07-18
   messages = [],
   temperature = 0,
   max_tokens = 5012,
@@ -22,13 +21,7 @@ async function chat({
       - Conduct comprehensive analysis for given task before working on given task
       - Consider items in given analysis sequentially while analyzing
       - Apply given instructions if any
-      - Provide final return in given return_format
-    `,
-  });
-  messages.unshift({
-    role: "system",
-    content: `
-      Motto: ALWAYS THINK ALOUD
+      - Provide final result in given return_format
     `,
   });
 

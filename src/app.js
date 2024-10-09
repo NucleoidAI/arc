@@ -65,10 +65,11 @@ const train_dataset = {
     instances: [],
   })),
 };
+Matrix.init(input.length);
 
 // For running instruct dataset
 // const { dataset } = require("./instruct_dataset/dataset.core.json");
-// Matrix.init(dataset[0].input_matrix.length, dataset[0].output_matrix.length);
+// Matrix.init(dataset[0].input_matrix.length);
 // const train_dataset = {
 //   dataset: dataset.map(({ input_matrix, output_matrix }) => ({
 //     input_matrix: Matrix.encode(input_matrix),
@@ -80,7 +81,7 @@ const train_dataset = {
 async function start() {
   const train_session_id = uuid();
 
-  const { statements } = await analyzer.patterns({ train_dataset });
+  const { statements } = await analyzer.statements({ train_dataset });
   train_dataset.statements = statements;
 
   const { declarations } = await analyzer.declarations({
@@ -95,9 +96,10 @@ async function start() {
     const { input_matrix, output_matrix } = dataset;
 
     const { instances } = await analyzer.instances({
+      statements,
       declarations,
-      input_matrix,
-      output_matrix,
+      input_matrix: Matrix.encode(input_matrix),
+      output_matrix: Matrix.encode(output_matrix),
     });
 
     for (const { input_instance, output_instance } of instances) {
@@ -143,7 +145,6 @@ async function start() {
     });
 
     const { output_instance } = await visualizer.output_instance({
-      patterns,
       train_dataset,
       test_input_instance: input_instance,
       instance_value,

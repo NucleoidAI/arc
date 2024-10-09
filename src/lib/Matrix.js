@@ -1,9 +1,11 @@
+/* eslint-disable no-unreachable */
+
 let _rows = 0;
 let _cols = 0;
 
-function init(rows, cols) {
-  _rows = rows;
-  _cols = cols;
+function init(length) {
+  _rows = length;
+  _cols = length;
 }
 
 function merge(...matrices) {
@@ -47,7 +49,10 @@ function subtract(matrix1, matrix2) {
   return result;
 }
 
+// Experimental encoding/decoding
 function encode(matrix) {
+  return matrix;
+
   let result = [];
 
   for (let i = 0; i < matrix.length; i++) {
@@ -62,6 +67,8 @@ function encode(matrix) {
 }
 
 function decode(string) {
+  return string;
+
   let matrix = Array.from({ length: _rows }, () => Array(_cols).fill(0));
 
   const entries = string.split("-");
@@ -76,7 +83,7 @@ function decode(string) {
 }
 
 function toString(matrix) {
-  matrix.forEach((row) => {
+  decode(matrix).forEach((row) => {
     console.debug(`[${row.join(",")}]`);
   });
 }

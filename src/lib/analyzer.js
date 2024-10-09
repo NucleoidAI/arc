@@ -4,14 +4,14 @@ const instruct_dataset = require("../instruct_dataset");
 const nucleoid = require("./nucleoid");
 const Markdown = require("./Markdown");
 
-async function patterns({ train_dataset }) {
+async function statements({ train_dataset }) {
   console.log("Analyzing patterns...");
 
   const { choices } = await openai.chat({
     messages: [
       {
         role: "system",
-        content: instruct_dataset.analyzer.patterns(),
+        content: instruct_dataset.analyzer.statements(),
       },
       {
         role: "user",
@@ -23,16 +23,16 @@ async function patterns({ train_dataset }) {
           - Find all patterns between shapes, objects etc. in each example
           - Provide all rules found in patterns
           - Provide complete details of found shapes and their parts also their formal names
-          - Provide logical explanation of patterns found in between input_matrix and output_matrix in given train_dataset
+          - Provide declarative logical explanation of patterns found in between input_matrix and output_matrix in given train_dataset
           - Provide complete summery of findings
           instructions:
           - Provide only clear patterns and if found pattern is not certain, skip it without mentioning
           task:
           - Find logical statements based on patterns in between input_matrix and output_matrix in given train_dataset
-          return_format:
-          { statements: [statements] }
           train_dataset:
           ${JSON.stringify(train_dataset)}
+          return_format:
+          { statements: [statements] }
         `,
       },
     ],
@@ -59,12 +59,13 @@ async function declarations({ train_dataset }) {
       {
         role: "user",
         content: `
+          analysis:
           task:
-          Identify declarations for given statement and train_dataset in Nucleoid Syntax
-          return_format:
-          { declarations: [NUC_DECLARATIONS] }
+          - Identify declarations for given statement and train_dataset in Nucleoid Syntax
           train_dataset:
           ${JSON.stringify(train_dataset)}
+          return_format:
+          { declarations: [NUC_DECLARATIONS] }
         `,
       },
     ],
@@ -80,7 +81,7 @@ async function declarations({ train_dataset }) {
 }
 
 async function instances({
-  patterns,
+  statements,
   declarations,
   input_matrix,
   output_matrix,
@@ -92,46 +93,34 @@ async function instances({
       {
         role: "system",
         content: `
-          - Extract each input_instance from given input_matrix based on given patterns
-          - Extract each output_instance from given output_matrix based on given patterns
-          - Use instruct_dataset as a reference
-          - Return in JSON format as { instances: [ { input_instance: "INPUT_INSTANCES", output_instance: "OUTPUT_INSTANCES" } ] }
-        `,
-      },
-      {
-        role: "system",
-        content: `
-          Instructions:
-          - input_matrix is inserted matrix
-          - output_matrix is converted matrix from inserted matrix
-          - input_instance contains an instance in input_matrix based on found pattern in between input_matrix and output_matrix
-          - input_instance must contain only 1 instance of found pattern
-          - input_instance must be filled rest of empty spaces with 0s
-          - input_instance must have in same dimension with its input_matrix
-          - output_instance contains an corresponding instance in output_matrix based on found pattern in between input_matrix and output_matrix
-          - output_instance must contain only 1 instance of found pattern
-          - output_instance must be filled rest of empty spaces with 0s
-          - output_instance must have in same dimension with its output_matrix
           ${instruct_dataset.analyzer.instances()}
         `,
       },
       {
         role: "user",
         content: `
-          patterns:
-          ${patterns}          
-          train_dataset:
-          ${JSON.stringify({
-            declarations,
-            dataset: [{ input_matrix, output_matrix }],
-          })}
+          analysis:
+          
+          task:
+          - Extract each input_instance from given input_matrix based on given statements and declarations
+          - Extract each output_instance from given output_matrix based on given statements and declarations
+          statements:
+          ${JSON.stringify(statements)}
+          declarations:
+          ${JSON.stringify(declarations)}
+          input_matrix:
+          ${JSON.stringify(input_matrix)}
+          output_matrix:
+          ${JSON.stringify(output_matrix)}
+          return_format:
+          { instances: [ { input_instance: [INPUT_INSTANCES], output_instance: [OUTPUT_INSTANCES] } ] }
         `,
       },
     ],
   });
 
   const [first] = choices;
-  const { instances } = JSON.parse(first.message.content);
+  const { instances } = Markdown.json(first.message.content);
 
   instances.forEach((i) => {
     Matrix.toString(i.input_instance);
@@ -145,8 +134,9 @@ async function instances({
 }
 
 async function value({
-  instance_name,
   train_session_id,
+  instance_name,
+  statements,
   declarations,
   input_instance,
   output_instance,
@@ -157,28 +147,25 @@ async function value({
     messages: [
       {
         role: "system",
-        content: `
-          - Create Nucleoid code for given instance
-          - Use instruct_dataset as a reference
-          - Return in JSON format as { nuc: "NUCLEOID_CODE" }
-        `,
-      },
-
-      {
-        role: "system",
         content: instruct_dataset.analyzer.value(),
       },
       {
         role: "user",
         content: `
+          task:
+          Create Nucleoid code for given instance
           instance_name:
           ${instance_name}
+          statements:
+          ${statements.join("\n")}
           declarations:
           ${declarations.join("\n")}
           input_instance:
           ${JSON.stringify(input_instance)}
           output_instance:
           ${JSON.stringify(output_instance)}
+          return_format:
+          { nuc: "NUCLEOID_CODE" }
         `,
       },
     ],
@@ -199,7 +186,7 @@ async function value({
 }
 
 module.exports = {
-  patterns,
+  statements,
   instances,
   declarations,
   value,
