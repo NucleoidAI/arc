@@ -1,6 +1,8 @@
 const OpenAI = require("openai");
 require("dotenv").config();
 
+const { v4: uuid } = require("uuid");
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -16,15 +18,15 @@ async function chat({
   response_format = { type: "text" },
 }) {
   messages.unshift({
-    role: "system",
+    role: "user",
     content: `
-      - Complete given tasks
-      - Follow given instructions while evaluating
-      - Provide final result in JSON as Markdown with given return_format
+      control_id:
+      ${uuid()}
+      instruction:
+      Provide final result in JSON as Markdown with given json_format without any comments
     `,
   });
 
-  // console.info(JSON.stringify(messages));
   return openai.chat.completions.create({
     model,
     messages,

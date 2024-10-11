@@ -63,15 +63,7 @@ const train_dataset = {
   })),
 };
 
-// const { dataset } = require("./instruct_dataset/dataset.core.json");
-// Matrix.init(dataset[0].input_matrix.length);
-// const train_dataset = {
-//   dataset: dataset.map(({ input_matrix, output_matrix }) => ({
-//     input_matrix: Matrix.encode(input_matrix),
-//     output_matrix: Matrix.encode(output_matrix),
-//     instances: [],
-//   })),
-// };
+// const train_dataset = require("./debug")._3aa6fb7a.analyzer;
 
 async function start() {
   const train_session_id = uuid();
@@ -82,10 +74,7 @@ async function start() {
   train_dataset.declarations = declarations;
 
   console.log("Creating declarations in Nucleoid...");
-  await nucleoid.run(
-    train_session_id,
-    ["'use declarative';", ...declarations].join("\n")
-  );
+  await nucleoid.run(train_session_id, declarations.join("\n"));
 
   for (const dataset of train_dataset.dataset.reverse()) {
     const { input_matrix, output_matrix } = dataset;
@@ -126,55 +115,47 @@ async function start() {
 
   /* Visualizing */
 
-  const test_session_id = uuid();
-  const test_instances = [];
-
-  console.log("Initializing Nucleoid session with declarations...");
-  await nucleoid.run(test_session_id, train_dataset.declarations.join("\n"));
-
   const { instances } = await visualizer.instances({
     train_dataset,
     test_input_matrix,
   });
 
-  for (const { input_instance } of instances) {
-    const { input_code, output_value } = await visualizer.value({
-      instance_name: `obj${test_instances.length}`,
+  // const instances = require("./debug")._3aa6fb7a.visualizer;
+
+  const test_session_id = uuid();
+  let test_index = 0;
+
+  console.log("Initializing Nucleoid session with declarations...");
+  await nucleoid.run(test_session_id, train_dataset.declarations.join("\n"));
+
+  let result_matrix = Array.from({ length: test_output_matrix.length }, () =>
+    Array(test_output_matrix[0].length).fill(0)
+  );
+
+  for (const { input_object } of instances.reverse()) {
+    const { output_value } = await visualizer.value({
+      instance_name: `obj${test_index++}`,
       test_session_id,
       train_dataset,
-      test_input_instance: input_instance,
+      input_object,
     });
 
     const { output_instance } = await visualizer.output_instance({
+      test_input_matrix,
+      result_matrix,
       train_dataset,
-      test_input_instance: input_instance,
+      input_object,
       output_value,
     });
 
-    test_instances.push({
-      input_instance,
-      output_instance,
-      input_code,
-      output_value,
-    });
+    result_matrix = Matrix.merge(result_matrix, output_instance);
   }
-
-  let background = test_input_matrix;
-
-  for (const { input_instance } of instances) {
-    background = Matrix.subtract(background, input_instance);
-  }
-
-  const result = Matrix.merge(
-    background,
-    ...test_instances.map((i) => i.output_instance)
-  );
 
   console.debug("Result:");
-  Matrix.toString(result);
+  Matrix.toString(result_matrix);
   console.debug("Expected:");
   Matrix.toString(test_output_matrix);
-  return result;
+  return result_matrix;
 }
 
 module.exports = start;

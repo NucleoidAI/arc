@@ -1,10 +1,10 @@
 {
   "declarations": [
-    "class Obj { constructor(orientation, initial_position) { this.shape = 'label8001'; this.orientation = orientation; this.initial_position = initial_position }}",
-    "if($Obj.orientation === 'horizontal' && $Obj.initial_position === 'left') { $Obj.shape = 'label4102'; $Obj.extension = 'right' }",
-    "if($Obj.orientation === 'horizontal' && $Obj.initial_position === 'right') { $Obj.shape = 'label4102'; $Obj.extension = 'left' }",
-    "if($Obj.orientation === 'vertical' && $Obj.initial_position === 'up') { $Obj.shape = 'label6012'; $Obj.extension = 'down' }",
-    "if($Obj.orientation === 'vertical' && $Obj.initial_position === 'down') { $Obj.shape = 'label6012'; $Obj.extension = 'up' }"
+    "'use declarative'; class Obj { constructor(orientation, initial_position) { this.shape = 'label8001'; this.orientation = orientation; this.initial_position = initial_position }}",
+    "'use declarative'; if($Obj.orientation === 'horizontal' && $Obj.initial_position === 'left') { $Obj.shape = 'label4102'; $Obj.extension = 'right' }",
+    "'use declarative'; if($Obj.orientation === 'horizontal' && $Obj.initial_position === 'right') { $Obj.shape = 'label4102'; $Obj.extension = 'left' }",
+    "'use declarative'; if($Obj.orientation === 'vertical' && $Obj.initial_position === 'up') { $Obj.shape = 'label6012'; $Obj.extension = 'down' }",
+    "'use declarative'; if($Obj.orientation === 'vertical' && $Obj.initial_position === 'down') { $Obj.shape = 'label6012'; $Obj.extension = 'up' }"
   ],
   "dataset": [
     {
@@ -51,7 +51,7 @@
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]
           ],
-          "input_code": "var obj5262 = new Obj('horizontal', 'left')",
+          "input_code": "'use imperative'; var obj5262 = new Obj('horizontal', 'left')",
           "output_value": {"id":"obj9959","shape":"label4102","orientation":"horizontal","initial_position":"left","extension":"right"}
         },
         {
@@ -76,7 +76,7 @@
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]
           ],
-          "input_code": "var obj7957 = new Obj('horizontal', 'right')",
+          "input_code": "'use imperative'; var obj7957 = new Obj('horizontal', 'right')",
           "output_value": {"id":"obj7957","shape":"label4102","orientation":"horizontal","initial_position":"right","extension":"left"}
         }
       ]
@@ -125,7 +125,7 @@
             [8, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]
           ],
-          "input_code": "var obj8547 = new Obj('vertical', 'down')",
+          "input_code": "'use imperative'; var obj8547 = new Obj('vertical', 'down')",
           "output_value": {"id":"obj8547","shape":"label6012","orientation":"vertical","initial_position":"down","extension":"up"}
         },
         {
@@ -150,7 +150,7 @@
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]
           ],
-          "input_code": "var obj5705 = new Obj('horizontal', 'left')",
+          "input_code": "'use imperative'; var obj5705 = new Obj('horizontal', 'left')",
           "output_value": {"id":"obj5705","shape":"label4102","orientation":"horizontal","initial_position":"left","extension":"right"}
         }
       ]
@@ -199,7 +199,7 @@
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]
           ],
-          "input_code": "var obj6898 = new Obj('horizontal', 'right')",
+          "input_code": "'use imperative'; var obj6898 = new Obj('horizontal', 'right')",
           "output_value": {"id":"obj6898","shape":"label4102","orientation":"horizontal","initial_position":"right","extension":"left"}
         },
         {
@@ -224,7 +224,7 @@
             [0, 6, 0, 0, 0, 0, 0, 0],
             [0, 8, 0, 0, 0, 0, 0, 0]
           ],
-          "input_code": "var obj6941 = new Obj('vertical', 'down')",
+          "input_code": "'use imperative'; var obj6941 = new Obj('vertical', 'down')",
           "output_value": {"id":"obj6941","shape":"label6012","orientation":"vertical","initial_position":"down","extension":"up"}
         },
         {
@@ -249,7 +249,7 @@
             [0, 0, 0, 0, 0, 0, 6, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]
           ],
-          "input_code": "var obj8615 = new Obj('vertical', 'up')",
+          "input_code": "'use imperative'; var obj8615 = new Obj('vertical', 'up')",
           "output_value": {"id":"obj8615","shape":"label6012","orientation":"vertical","initial_position":"up","extension":"down"}
         }
       ]

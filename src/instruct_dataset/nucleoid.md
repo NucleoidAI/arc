@@ -142,6 +142,11 @@ Vt.filter(v => v.rc);
 Vt.filter(v => { return v.rc && v.b === 'Wi' });
 ```
 
+```nuc
+// Returns all instances of Vt class
+Vt;
+```
+
 ### Return
 
 - Last statement in the code block is returned as the result

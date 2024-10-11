@@ -15,6 +15,7 @@
     "prettier": "^2.6.2"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.29.0",
     "@nucleoidai/expert": "^1.0.3",
     "axios": "^1.7.7",
     "dotenv": "^16.4.5",

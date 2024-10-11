@@ -34,4 +34,18 @@ function focus(matrix) {
   };
 }
 
-module.exports = { focus };
+function enlarge(matrix, rows, cols) {
+  const { x_position: xOffset, y_position: yOffset, object_matrix } = matrix;
+
+  const originalArray = Array.from({ length: rows }, () => Array(cols).fill(0));
+
+  for (let i = 0; i < object_matrix.length; i++) {
+    for (let j = 0; j < object_matrix[i].length; j++) {
+      originalArray[yOffset + i][xOffset + j] = object_matrix[i][j];
+    }
+  }
+
+  return originalArray;
+}
+
+module.exports = { focus, enlarge };

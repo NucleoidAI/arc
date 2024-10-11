@@ -40,7 +40,8 @@ function subtract(matrix1, matrix2) {
   // Perform element-wise subtraction
   for (let i = 0; i < rows; i++) {
     for (let j = 0; j < cols; j++) {
-      result[i][j] = matrix1[i][j] - matrix2[i][j];
+      const num = matrix1[i][j] - matrix2[i][j];
+      result[i][j] = num > 0 ? num : 0;
     }
   }
 

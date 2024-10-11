@@ -1,36 +1,24 @@
-const openai = require("./openai");
 const Matrix = require("./Matrix");
-const instruct_dataset = require("../instruct_dataset");
 const nucleoid = require("./nucleoid");
-const Markdown = require("./Markdown");
 const Zoom = require("./Zoom");
+const ann = require("./ann");
 
 async function declarations({ train_dataset }) {
   console.log("Analyzing declarations...");
 
-  const { choices } = await openai.chat({
+  const { declarations } = await ann.generate({
     messages: [
-      {
-        role: "system",
-        content: instruct_dataset.analyzer.declarations(),
-      },
       {
         role: "user",
         content: `
-          analysis:
-          task:
-          - Identify declarative statements for train_dataset in Nucleoid Syntax
           train_dataset:
           ${JSON.stringify(train_dataset)}
-          return_format:
-          { declarations: [NUC_DECLARATIONS] }
+          json_format:
+          { "declarations": <NUC_DECLARATIONS> }
         `,
       },
     ],
   });
-
-  const [first] = choices;
-  const { declarations } = Markdown.json(first.message.content);
 
   console.debug("declarations:");
   console.debug(declarations);
@@ -41,40 +29,38 @@ async function declarations({ train_dataset }) {
 async function instances({ declarations, input_matrix, output_matrix }) {
   console.log("Extracting instances...");
 
-  const { choices } = await openai.chat({
+  const { instances } = await ann.generate({
     messages: [
-      {
-        role: "system",
-        content: `
-          ${instruct_dataset.analyzer.instances()}
-        `,
-      },
       {
         role: "user",
         content: `
-          task:
-          - Extract each input_instance from given input_matrix based on given declarative statements in declarations
-          - Extract each output_instance from given output_matrix based on given declarative statements in declarations
           declarations:
           ${JSON.stringify(declarations)}
           input_matrix:
           ${JSON.stringify(input_matrix)}
           output_matrix:
           ${JSON.stringify(output_matrix)}
-          return_format:
-          { instances: [ { input_object: [INPUT_OBJECT], output_object: [OUTPUT_OBJECT], input_instance: [INPUT_INSTANCES], output_instance: [OUTPUT_INSTANCES] } ] }
+          query:
+          Obj;
+          json_format:
+          {
+            "instances": [{
+              "input_object": { "x_position": <INPUT_X_POSITION>, "y_position": <INPUT_Y_POSITION>, "object_matrix" = <INPUT_OBJECT_MATRIX> },
+              "output_object": { x_position: <OUTPUT_X_POSITION>, "y_position": <OUTPUT_Y_POSITION>, "object_matrix" = <OUTPUT_OBJECT_MATRIX> }
+            }]
+          }
         `,
       },
     ],
   });
 
-  const [first] = choices;
-  const { instances } = Markdown.json(first.message.content);
-
   instances.forEach((instance) => {
-    const { input_instance, output_instance } = instance;
-    instance.input_object = Zoom.focus(input_instance);
-    instance.output_object = Zoom.focus(output_instance);
+    const { input_object, output_object } = instance;
+    const rows = input_matrix.length;
+    const cols = input_matrix[0].length;
+
+    instance.input_instance = Zoom.enlarge(input_object, rows, cols);
+    instance.output_instance = Zoom.enlarge(output_object, rows, cols);
   });
 
   instances.forEach((instance) => {
@@ -110,17 +96,11 @@ async function value({
 }) {
   console.log("Calculating value...");
 
-  const { choices } = await openai.chat({
+  const { input_code } = await ann.generate({
     messages: [
-      {
-        role: "system",
-        content: instruct_dataset.analyzer.value(),
-      },
       {
         role: "user",
         content: `
-          task:
-          Create Nucleoid code for given object based on declarations
           instance_name:
           ${instance_name}
           declarations:
@@ -129,15 +109,12 @@ async function value({
           ${JSON.stringify(input_object)}
           output_object:
           ${JSON.stringify(output_object)}
-          return_format:
-          { input_code: "NUCLEOID_CODE" }
+          json_format:
+          { "input_code": <NUCLEOID_CODE> }
         `,
       },
     ],
   });
-
-  const [first] = choices;
-  const { input_code } = Markdown.json(first.message.content);
 
   console.log("Creating instance in Nucleoid...");
   const output_value = await nucleoid.run(train_session_id, input_code);

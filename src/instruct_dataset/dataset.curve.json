@@ -1,8 +1,8 @@
 {
   "declarations": [
-    "class Obj { constructor(vertex) { this.obj = 'label7544'; this.vertex = vertex } }",
-    "if($Obj.vertex === 4) { $Obj.shape = 'label6840'; $Obj.rims = '8'; $Obj.direction = 'up'; }",
-    "if($Obj.vertex === 9) { $Obj.shape = 'label9906'; $Obj.rims = '2'; $Obj.direction = 'down'; }"
+    "'use declarative'; class Obj { constructor(vertex) { this.obj = 'label7544'; this.vertex = vertex } }",
+    "'use declarative'; if($Obj.vertex === 4) { $Obj.shape = 'label6840'; $Obj.rims = '8'; $Obj.direction = 'up'; }",
+    "'use declarative'; if($Obj.vertex === 9) { $Obj.shape = 'label9906'; $Obj.rims = '2'; $Obj.direction = 'down'; }"
   ],
   "dataset": [
     {
@@ -41,7 +41,7 @@
             [0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0]
           ],
-          "input_code": "var obj3910 = new Obj(4); obj3910;",
+          "input_code": "'use imperative'; var obj3910 = new Obj(4); obj3910;",
           "output_value": {"id":"obj3910","shape":"label6840","vertex":4,"rims":8,"direction":"up"}
         },
         {
@@ -62,7 +62,7 @@
             [0, 4, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0]
           ],
-          "input_code": "var obj7130 = new Obj(4); obj7130;",
+          "input_code": "'use imperative'; var obj7130 = new Obj(4); obj7130;",
           "output_value": {"id":"obj7130","shape":"label6840","vertex":4,"rims":8,"direction":"up"}
         }
       ]
@@ -103,7 +103,7 @@
             [0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0]
           ],
-          "input_code": "var obj2307 = new Obj(4)",
+          "input_code": "'use imperative'; var obj2307 = new Obj(4)",
           "output_value": {"id":"obj2307","shape":"label6840","vertex":4,"rims":8,"direction":"up"}
         },
         {
@@ -124,7 +124,7 @@
             [2, 0, 2, 0, 0, 0],
             [0, 0, 0, 0, 0, 0]
           ],
-          "input_code": "var obj7042 = new Obj(9)",
+          "input_code": "'use imperative'; var obj7042 = new Obj(9)",
           "output_value": {"id":"obj2307","shape":"label9906","vertex":9,"rims":2,"direction":"down"}
         }
       ]
@@ -165,7 +165,7 @@
             [0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0]
           ],
-          "input_code": "var obj9118 = new Obj(4)",
+          "input_code": "'use imperative'; var obj9118 = new Obj(4)",
           "output_value": {"id":"obj9118","shape":"label6840","vertex":4,"rims":8,"direction":"up"}
         },
         {
@@ -186,7 +186,7 @@
             [0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0]
           ],
-          "input_code": "var obj9552 = new Obj(9)",
+          "input_code": "'use imperative'; var obj9552 = new Obj(9)",
           "output_value": {"id":"obj9552","shape":"label9906","vertex":9,"rims":2,"direction":"down"}
         },
         {
@@ -207,7 +207,7 @@
             [0, 2, 0, 2, 0, 0],
             [0, 0, 0, 0, 0, 0]
           ],
-          "input_code": "var obj6814 = new Obj(9)",
+          "input_code": "'use imperative'; var obj6814 = new Obj(9)",
           "output_value": {"id":"obj6814","shape":"label9906","vertex":9,"rims":2,"direction":"down"}
         }
       ]
