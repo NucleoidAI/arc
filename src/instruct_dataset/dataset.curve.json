@@ -1,13 +1,8 @@
 {
-  "statements": [
-    "Object shape is v_shape if center is '4' or '9'.",
-    "If a '4' is present in the input matrix, '8's are introduced adjacent to it as a side and curve direction is up.",
-    "If a '9' is present in the input matrix, '2's are introduced adjacent to it as a side and curve direction is down."
-  ],
   "declarations": [
-    "class Obj { constructor(center) { this.center = center } }",
-    "if($Obj.center === 4) { $Obj.shape = 'v_shape'; $Obj.sides = '8'; $Obj.direction = 'up' }",
-    "if($Obj.center === 9) { $Obj.shape = 'v_shape'; $Obj.sides = '2'; $Obj.direction = 'down' }"
+    "class Obj { constructor(vertex) { this.obj = 'label7544'; this.vertex = vertex } }",
+    "if($Obj.vertex === 4) { $Obj.shape = 'label6840'; $Obj.rims = '8'; $Obj.direction = 'up'; }",
+    "if($Obj.vertex === 9) { $Obj.shape = 'label9906'; $Obj.rims = '2'; $Obj.direction = 'down'; }"
   ],
   "dataset": [
     {
@@ -46,8 +41,8 @@
             [0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0]
           ],
-          "nuc": "var obj3910 = new Obj(4); obj3910;",
-          "instance_value": {"id":"obj3910","center":4,"shape":"v_shape","sides":8,"direction":"up"}
+          "input_code": "var obj3910 = new Obj(4); obj3910;",
+          "output_value": {"id":"obj3910","shape":"label6840","vertex":4,"rims":8,"direction":"up"}
         },
         {
           "instance_name": "obj7130",
@@ -67,8 +62,8 @@
             [0, 4, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0]
           ],
-          "nuc": "var obj7130 = new Obj(4); obj7130;",
-          "instance_value": {"id":"obj7130","center":4,"shape":"v_shape","sides":8,"direction":"up"}
+          "input_code": "var obj7130 = new Obj(4); obj7130;",
+          "output_value": {"id":"obj7130","shape":"label6840","vertex":4,"rims":8,"direction":"up"}
         }
       ]
     },
@@ -108,8 +103,8 @@
             [0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0]
           ],
-          "nuc": "var obj2307 = new Obj(4)",
-          "instance_value": {"id":"obj2307","center":4,"shape":"v_shape","sides":8,"direction":"up"}
+          "input_code": "var obj2307 = new Obj(4)",
+          "output_value": {"id":"obj2307","shape":"label6840","vertex":4,"rims":8,"direction":"up"}
         },
         {
           "instance_name": "obj7042",
@@ -129,8 +124,8 @@
             [2, 0, 2, 0, 0, 0],
             [0, 0, 0, 0, 0, 0]
           ],
-          "nuc": "var obj7042 = new Obj(9)",
-          "instance_value": {"id":"obj2307","center":9,"shape":"v_shape","sides":2,"direction":"down"}
+          "input_code": "var obj7042 = new Obj(9)",
+          "output_value": {"id":"obj2307","shape":"label9906","vertex":9,"rims":2,"direction":"down"}
         }
       ]
     },
@@ -170,8 +165,8 @@
             [0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0]
           ],
-          "nuc": "var obj9118 = new Obj(4)",
-          "instance_value": {"id":"obj9118","center":4,"shape":"v_shape","sides":8,"direction":"up"}
+          "input_code": "var obj9118 = new Obj(4)",
+          "output_value": {"id":"obj9118","shape":"label6840","vertex":4,"rims":8,"direction":"up"}
         },
         {
           "instance_name": "obj9552",
@@ -191,8 +186,8 @@
             [0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0]
           ],
-          "nuc": "var obj9552 = new Obj(9)",
-          "instance_value": {"id":"obj9552","center":9,"shape":"v_shape","sides":2,"direction":"down"}
+          "input_code": "var obj9552 = new Obj(9)",
+          "output_value": {"id":"obj9552","shape":"label9906","vertex":9,"rims":2,"direction":"down"}
         },
         {
           "instance_name": "obj6814",
@@ -212,8 +207,8 @@
             [0, 2, 0, 2, 0, 0],
             [0, 0, 0, 0, 0, 0]
           ],
-          "nuc": "var obj6814 = new Obj(9)",
-          "instance_value": {"id":"obj6814","center":9,"shape":"v_shape","sides":2,"direction":"down"}
+          "input_code": "var obj6814 = new Obj(9)",
+          "output_value": {"id":"obj6814","shape":"label9906","vertex":9,"rims":2,"direction":"down"}
         }
       ]
     }

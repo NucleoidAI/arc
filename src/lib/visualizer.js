@@ -83,7 +83,7 @@ async function value({
   train_dataset,
   test_input_instance,
 }) {
-  console.log("Calculating test instance_value...");
+  console.log("Calculating test value...");
   const { choices } = await openai.chat({
     messages: [
       {
@@ -115,12 +115,12 @@ async function value({
                     instance_name,
                     input_instance,
                     output_instance,
-                    nuc,
+                    input_code,
                   }) => ({
                     instance_name,
                     input_instance,
                     output_instance,
-                    nuc,
+                    input_code,
                   })
                 ),
               })
@@ -134,24 +134,24 @@ async function value({
   });
 
   const [first] = choices;
-  const { nuc } = JSON.parse(first.message.content);
+  const { input_code } = Markdown.json(first.message.content);
 
   console.log("Creating test instance in Nucleoid...");
-  const instance_value = await nucleoid.run(test_session_id, nuc);
+  const output_value = await nucleoid.run(test_session_id, input_code);
 
-  console.debug("nuc:");
-  console.debug(nuc);
-  console.debug("instance_value:");
-  console.debug(instance_value);
+  console.debug("input_code:");
+  console.debug(input_code);
+  console.debug("output_value:");
+  console.debug(output_value);
 
-  return { nuc, instance_value };
+  return { input_code, output_value };
 }
 
 async function output_instance({
   patterns,
   train_dataset,
   test_input_instance,
-  instance_value,
+  output_value,
 }) {
   console.log("Extracting test output_instance...");
   const { choices } = await openai.chat({
@@ -159,7 +159,7 @@ async function output_instance({
       {
         role: "system",
         content: `
-          - Generate output_instance for given input_instance and instance_value based on given patterns and declarations
+          - Generate output_instance for given input_instance and output_value based on given patterns and declarations
           - Use instruct_dataset and train_dataset as a reference 
           - Return in JSON format as { output_instance: [OUTPUT_INSTANCE] }`,
       },
@@ -176,15 +176,15 @@ async function output_instance({
           ${JSON.stringify(train_dataset)}
           input_instance:
           ${JSON.stringify(test_input_instance)}
-          instance_value:
-          ${JSON.stringify(instance_value)}
+          output_value:
+          ${JSON.stringify(output_value)}
         `,
       },
     ],
   });
 
   const [first] = choices;
-  const { output_instance } = JSON.parse(first.message.content);
+  const { output_instance } = Markdown.json(first.message.content);
 
   console.debug("output_instance:");
   Matrix.toString(output_instance);

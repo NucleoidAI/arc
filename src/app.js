@@ -46,17 +46,14 @@ require.extensions[".md"] = (module, filename) => {
 const analyzer = require("./lib/analyzer");
 const visualizer = require("./lib/visualizer");
 const nucleoid = require("./lib/nucleoid");
+const Matrix = require("./lib/Matrix");
 const { v4: uuid } = require("uuid");
 const debug = require("./debug"); // eslint-disable-line no-unused-vars
 
 const {
   train,
-  test: [{ input, output: test_output_matrix }],
+  test: [{ input: test_input_matrix, output: test_output_matrix }],
 } = require("./data/training/3aa6fb7a.json"); // 0ca9ddb6.json
-
-const Matrix = require("./lib/Matrix");
-
-const test_input_matrix = input;
 
 const train_dataset = {
   dataset: train.map(({ input, output }) => ({
@@ -65,9 +62,7 @@ const train_dataset = {
     instances: [],
   })),
 };
-Matrix.init(input.length);
 
-// For running instruct dataset
 // const { dataset } = require("./instruct_dataset/dataset.core.json");
 // Matrix.init(dataset[0].input_matrix.length);
 // const train_dataset = {
@@ -81,22 +76,21 @@ Matrix.init(input.length);
 async function start() {
   const train_session_id = uuid();
 
-  const { statements } = await analyzer.statements({ train_dataset });
-  train_dataset.statements = statements;
-
   const { declarations } = await analyzer.declarations({
     train_dataset,
   });
   train_dataset.declarations = declarations;
 
   console.log("Creating declarations in Nucleoid...");
-  await nucleoid.run(train_session_id, declarations.join("\n"));
+  await nucleoid.run(
+    train_session_id,
+    ["'use declarative';", ...declarations].join("\n")
+  );
 
-  for (const dataset of train_dataset.dataset) {
+  for (const dataset of train_dataset.dataset.reverse()) {
     const { input_matrix, output_matrix } = dataset;
 
     const { instances } = await analyzer.instances({
-      statements,
       declarations,
       input_matrix,
       output_matrix,
@@ -110,23 +104,22 @@ async function start() {
     } of instances) {
       const instance_name = `obj${dataset.instances.length}`;
 
-      const { nuc, instance_value } = await analyzer.value({
+      const { input_code, output_value } = await analyzer.value({
         train_session_id,
         instance_name,
-        statements,
         declarations,
         input_object,
         output_object,
-        input_instance,
-        output_instance,
       });
 
       dataset.instances.push({
         instance_name,
         input_instance,
         output_instance,
-        nuc,
-        instance_value,
+        input_object,
+        output_object,
+        input_code,
+        output_value,
       });
     }
   }
@@ -145,7 +138,7 @@ async function start() {
   });
 
   for (const { input_instance } of instances) {
-    const { nuc, instance_value } = await visualizer.value({
+    const { input_code, output_value } = await visualizer.value({
       instance_name: `obj${test_instances.length}`,
       test_session_id,
       train_dataset,
@@ -155,14 +148,14 @@ async function start() {
     const { output_instance } = await visualizer.output_instance({
       train_dataset,
       test_input_instance: input_instance,
-      instance_value,
+      output_value,
     });
 
     test_instances.push({
       input_instance,
       output_instance,
-      nuc,
-      instance_value,
+      input_code,
+      output_value,
     });
   }
 

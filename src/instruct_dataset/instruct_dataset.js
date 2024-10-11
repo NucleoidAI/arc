@@ -17,16 +17,16 @@ const dataset = [
         instance_name,
         input_instance,
         output_instance,
-        nuc,
-        instance_value,
+        input_code,
+        output_value,
       }) => ({
         instance_name,
         input_instance: Matrix.encode(input_instance),
         output_instance: Matrix.encode(output_instance),
         input_object: Zoom.focus(input_instance),
         output_object: Zoom.focus(output_instance),
-        nuc,
-        instance_value,
+        input_code,
+        output_value,
       })
     ),
   })),
@@ -36,11 +36,6 @@ module.exports = {
   nucleoid,
   arc,
   analyzer: {
-    statements: () => {
-      return `
-        ${arc}
-      `;
-    },
     declarations: () => {
       return `
         ${arc}
@@ -55,27 +50,9 @@ module.exports = {
         ${nucleoid}
         instruct_dataset:
         ${JSON.stringify(
-          dataset.map(({ declarations, dataset }) => ({
-            declarations,
-            dateset: dataset.map(
-              ({ input_matrix, output_matrix, instances }) => ({
-                input_matrix,
-                output_matrix,
-                instances: instances.map(
-                  ({
-                    input_instance,
-                    output_instance,
-                    input_object,
-                    output_object,
-                  }) => ({
-                    input_instance,
-                    output_instance,
-                    input_object,
-                    output_object,
-                  })
-                ),
-              })
-            ),
+          dataset.map(({ ...props }) => ({
+            ...props,
+            dataset: dataset.map(({ ...props }) => ({ ...props })),
           }))
         )}
       `;
@@ -97,12 +74,12 @@ module.exports = {
                     instance_name,
                     input_instance,
                     output_instance,
-                    nuc,
+                    input_code,
                   }) => ({
                     instance_name,
                     input_instance,
                     output_instance,
-                    nuc,
+                    input_code,
                   })
                 ),
               })
@@ -146,12 +123,12 @@ module.exports = {
                     instance_name,
                     input_instance,
                     output_instance,
-                    nuc,
+                    input_code,
                   }) => ({
                     instance_name,
                     input_instance,
                     output_instance,
-                    nuc,
+                    input_code,
                   })
                 ),
               })

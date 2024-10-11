@@ -30,7 +30,7 @@ function focus(matrix) {
   return {
     x_position: xOffset,
     y_position: yOffset,
-    matrix: object,
+    object_matrix: object,
   };
 }
 

@@ -20,11 +20,11 @@ async function chat({
     content: `
       - Complete given tasks
       - Follow given instructions while evaluating
-      - Provide final result in given return_format
+      - Provide final result in JSON as Markdown with given return_format
     `,
   });
 
-  console.info(JSON.stringify(messages));
+  // console.info(JSON.stringify(messages));
   return openai.chat.completions.create({
     model,
     messages,

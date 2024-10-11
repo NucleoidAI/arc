@@ -6,7 +6,7 @@ function json(markdown) {
     return JSON.parse(lastMatch[1]);
   }
 
-  throw new SyntaxError("Markdown JSON parse issue");
+  throw new SyntaxError("Markdown JSON parse issue: " + markdown);
 }
 
 module.exports = { json };

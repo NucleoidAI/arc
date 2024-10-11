@@ -1,10 +1,7 @@
 {
-  "patterns": [
-    "If there are three consecutive 9s in a vertical or horizontal line, add 1 at a specific offset position."
-  ],
   "declarations": [
-    "class Obj { constructor() { this.center = 0; this.left = 0; this.right = 0; this.extension = 0; }}",
-    "if($Obj.left === 9 && $Obj.right === 9 && $Obj.center === 9) { $Obj.extension = 1; }"
+    "class Obj { constructor() { this.shape = 'label6747'; this.vertex = 0; this.vertical_line_segment = 0; this.horizontal_line_segment = 0; this.extension = 0; }}",
+    "if($Obj.vertical_line_segment === 9 && $Obj.horizontal_line_segment === 9 && $Obj.vertex === 9) { $Obj.shape = 'label6624'; $Obj.extension = 1; }"
   ],
   "dataset": [
     {
@@ -51,8 +48,8 @@
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]
           ],
-          "nuc": "var obj6068 = new Obj(); obj1.left = 9; obj1.right = 9; obj1.center = 9; obj1;",
-          "instance_value": {"id":"obj6068","left":9,"right":9,"center":9,"extension":1}
+          "input_code": "var obj6068 = new Obj(); obj1.vertical_line_segment = 9; obj1.horizontal_line_segment = 9; obj1.vertex = 9; obj1;",
+          "output_value": {"id":"obj6068","shape":"label6624","vertical_line_segment":9,"horizontal_line_segment":9,"vertex":9,"extension":1}
         },
         {
           "instance_name": "obj6348",
@@ -76,8 +73,8 @@
             [0, 0, 9, 9, 0, 0, 0, 0],
             [0, 1, 0, 0, 0, 0, 0, 0]
           ],
-          "nuc": "var obj6348 = new Obj(); obj1.left = 9; obj1.right = 9; obj1.center = 9; obj1;",
-          "instance_value": {"id":"obj6348","left":9,"right":9,"center":9,"extension":1}
+          "input_code": "var obj6348 = new Obj(); obj1.vertical_line_segment = 9; obj1.horizontal_line_segment = 9; obj1.vertex = 9; obj1;",
+          "output_value": {"id":"obj6348","shape":"label6624","vertical_line_segment":9,"horizontal_line_segment":9,"vertex":9,"extension":1}
         }
       ]
     },
@@ -125,8 +122,8 @@
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]
           ],
-          "nuc": "var obj4600 = new Obj(); obj1.left = 9; obj1.right = 9; obj1.center = 9; obj1;",
-          "instance_value": {"id":"obj4600","left":9,"right":9,"center":9,"extension":1}
+          "input_code": "var obj4600 = new Obj(); obj1.vertical_line_segment = 9; obj1.horizontal_line_segment = 9; obj1.vertex = 9; obj1;",
+          "output_value": {"id":"obj4600","shape":"label6624","vertical_line_segment":9,"horizontal_line_segment":9,"vertex":9,"extension":1}
         },
         {
           "instance_name": "obj8616",
@@ -150,8 +147,8 @@
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]
           ],
-          "nuc": "var obj8616 = new Obj(); obj1.left = 9; obj1.right = 9; obj1.center = 9; obj1;",
-          "instance_value": {"id":"obj8616","left":9,"right":9,"center":9,"extension":1}
+          "input_code": "var obj8616 = new Obj(); obj1.vertical_line_segment = 9; obj1.horizontal_line_segment = 9; obj1.vertex = 9; obj1;",
+          "output_value": {"id":"obj8616","shape":"label6624","vertical_line_segment":9,"horizontal_line_segment":9,"vertex":9,"extension":1}
         }
       ]
     },
@@ -199,8 +196,8 @@
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]
           ],
-          "nuc": "var obj5424 = new Obj(); obj1.left = 9; obj1.right = 9; obj1.center = 9; obj1;",
-          "instance_value": {"id":"obj5424","left":9,"right":9,"center":9,"extension":1}
+          "input_code": "var obj5424 = new Obj(); obj1.vertical_line_segment = 9; obj1.horizontal_line_segment = 9; obj1.vertex = 9; obj1;",
+          "output_value": {"id":"obj5424","shape":"label6624","vertical_line_segment":9,"horizontal_line_segment":9,"vertex":9,"extension":1}
         },
         {
           "instance_name": "obj2784",
@@ -224,8 +221,8 @@
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]
           ],
-          "nuc": "var obj2784 = new Obj(); obj1.left = 9; obj1.right = 9; obj1.center = 9; obj1;",
-          "instance_value": {"id":"obj2784","left":9,"right":9,"center":9,"extension":1}
+          "input_code": "var obj2784 = new Obj(); obj1.vertical_line_segment = 9; obj1.horizontal_line_segment = 9; obj1.vertex = 9; obj1;",
+          "output_value": {"id":"obj2784","shape":"label6624","vertical_line_segment":9,"horizontal_line_segment":9,"vertex":9,"extension":1}
         },
         {
           "instance_name": "obj9936",
@@ -249,8 +246,8 @@
             [0, 9, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]
           ],
-          "nuc": "var obj9936 = new Obj(); obj1.left = 9; obj1.right = 9; obj1.center = 9; obj1;",
-          "instance_value": {"id":"obj9936","left":9,"right":9,"center":9,"extension":1}
+          "input_code": "var obj9936 = new Obj(); obj1.vertical_line_segment = 9; obj1.horizontal_line_segment = 9; obj1.vertex = 9; obj1;",
+          "output_value": {"id":"obj9936","shape":"label6624","vertical_line_segment":9,"horizontal_line_segment":9,"vertex":9,"extension":1}
         }
       ]
     }
