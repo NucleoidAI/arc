@@ -1,7 +1,15 @@
 const { v4: uuid } = require("uuid");
 const instruct_dataset = require("../instruct_dataset");
 
-const llm = require("./claude");
+let llm;
+
+if (process.env.LLM === "CLAUDE") {
+  llm = require("./claude");
+}
+
+if (process.env.LLM === "OPENAI") {
+  llm = require("./openai");
+}
 
 async function generate({ model, messages = [], temperature = 0, max_tokens }) {
   messages.unshift({
