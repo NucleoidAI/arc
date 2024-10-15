@@ -11,6 +11,10 @@ if (process.env.LLM === "OPENAI") {
   llm = require("./openai");
 }
 
+if (process.env.LLM === "GEMINI") {
+  llm = require("./gemini");
+}
+
 async function generate({ model, messages = [], temperature = 0, max_tokens }) {
   messages.unshift({
     role: "user",
@@ -22,7 +26,7 @@ async function generate({ model, messages = [], temperature = 0, max_tokens }) {
       control_id:
       ${uuid()}
       instruction:
-      Respond result in JSON in given json_format without any comments
+      Respond in given json_format without any comments
     `,
   });
 

@@ -115,6 +115,9 @@ async function start() {
 
   /* Visualizing */
 
+  // console.log("Waiting for 60 seconds due to rate limits...");
+  // await new Promise((resolve) => setTimeout(resolve, 60 * 1000));
+
   const { instances } = await visualizer.instances({
     train_dataset,
     test_input_matrix,

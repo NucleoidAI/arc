@@ -7,7 +7,7 @@ const anthropic = new Anthropic({
 async function generate({
   model = "claude-3-5-sonnet-20240620", // claude-3-haiku-20240307
   messages = [],
-  temperature,
+  temperature = 0,
   max_tokens = 2048,
 }) {
   const {

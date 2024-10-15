@@ -1,4 +1,4 @@
-#ARC
+# ARC
 
 ## Problem Structure
 
@@ -7,6 +7,7 @@ output_matrix: The result after applying declarative logic to the input_matrix, 
 input_matrix and output_matrix are representations of the problem's initial and final states.
 
 ## Object Definitions
+
 Numbers from 1-9 represent objects.
 0 is used for empty spaces.
 
