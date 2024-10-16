@@ -15,6 +15,10 @@ if (process.env.LLM === "GEMINI") {
   llm = require("./gemini");
 }
 
+if (process.env.LLM === "MISTRAL") {
+  llm = require("./mistral");
+}
+
 async function generate({ model, messages = [], temperature = 0, max_tokens }) {
   messages.unshift({
     role: "user",
@@ -37,7 +41,11 @@ async function generate({ model, messages = [], temperature = 0, max_tokens }) {
     max_tokens,
   });
 
-  return JSON.parse(text);
+  try {
+    return JSON.parse(text);
+  } catch (err) {
+    throw SyntaxError("JSON Error: " + text);
+  }
 }
 
 module.exports = { generate };

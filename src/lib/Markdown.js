@@ -3,10 +3,8 @@ function json(markdown) {
 
   if (matches.length > 0) {
     const lastMatch = matches[matches.length - 1];
-    return JSON.parse(lastMatch[1]);
+    return lastMatch[1];
   }
-
-  throw new SyntaxError("Markdown JSON parse issue: " + markdown);
 }
 
 module.exports = { json };
