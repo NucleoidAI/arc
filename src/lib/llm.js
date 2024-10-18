@@ -19,6 +19,10 @@ if (process.env.LLM === "MISTRAL") {
   llm = require("./mistral");
 }
 
+if (process.env.LLM === "LLAMA") {
+  llm = require("./llama");
+}
+
 async function generate({ model, messages = [], temperature = 0, max_tokens }) {
   messages.unshift({
     role: "user",

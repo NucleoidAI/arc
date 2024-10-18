@@ -22,10 +22,7 @@ async function generate({
     model,
     messages,
     temperature,
-    max_tokens,
-    top_p: 1,
-    frequency_penalty: 0,
-    presence_penalty: 0,
+    maxTokens: max_tokens,
   });
 
   console.info({ prompt_tokens, completion_tokens });

@@ -1,7 +1,7 @@
 const nucleoid = require("./nucleoid");
 const Matrix = require("../lib/Matrix");
 const Zoom = require("./Zoom");
-const ann = require("./ann");
+const llm = require("./llm");
 
 async function instances({ train_dataset, test_input_matrix }) {
   console.log("Analyzing test_input_matrix...");
@@ -14,7 +14,7 @@ async function instances({ train_dataset, test_input_matrix }) {
   const rows = test_input_matrix.length;
   const cols = test_input_matrix[0].length;
 
-  const { instances } = await ann.generate({
+  const { instances } = await llm.generate({
     messages: [
       {
         role: "user",
@@ -65,7 +65,7 @@ async function value({
   input_object,
 }) {
   console.log("Calculating test value...");
-  const { input_code } = await ann.generate({
+  const { input_code } = await llm.generate({
     messages: [
       {
         role: "user",
@@ -113,7 +113,7 @@ async function output_instance({
   output_value,
 }) {
   console.log("Extracting test output_instance...");
-  const { output_object } = await ann.generate({
+  const { output_object } = await llm.generate({
     messages: [
       {
         role: "user",
