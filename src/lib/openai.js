@@ -29,7 +29,7 @@ async function generate({
   });
 
   console.info({ prompt_tokens, completion_tokens });
-  return content;
+  return JSON.parse(content);
 }
 
 module.exports = { generate };

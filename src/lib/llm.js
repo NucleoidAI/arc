@@ -23,6 +23,10 @@ if (process.env.LLM === "LLAMA") {
   llm = require("./llama");
 }
 
+if (process.env.LLM === "AZURE") {
+  llm = require("./azure");
+}
+
 async function generate({ model, messages = [], temperature = 0, max_tokens }) {
   messages.unshift({
     role: "user",
@@ -38,18 +42,12 @@ async function generate({ model, messages = [], temperature = 0, max_tokens }) {
     `,
   });
 
-  const text = await llm.generate({
+  return llm.generate({
     model,
     messages,
     temperature,
     max_tokens,
   });
-
-  try {
-    return JSON.parse(text);
-  } catch (err) {
-    throw SyntaxError("JSON Error: " + text);
-  }
 }
 
 module.exports = { generate };

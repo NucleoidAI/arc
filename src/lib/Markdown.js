@@ -3,7 +3,7 @@ function json(markdown) {
 
   if (matches.length > 0) {
     const lastMatch = matches[matches.length - 1];
-    return lastMatch[1];
+    return JSON.parse(lastMatch[1]);
   }
 }
 

@@ -1,7 +1,7 @@
 const axios = require("axios").default;
 
 async function generate({ messages = [] }) {
-  const response = await axios({
+  const { data } = await axios({
     method: "POST",
     url: `http://${process.env.LLAMA_HOST}/generate`,
     headers: {
@@ -12,7 +12,7 @@ async function generate({ messages = [] }) {
     },
   });
 
-  return response.data;
+  return data;
 }
 
 module.exports = { generate };

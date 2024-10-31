@@ -21,7 +21,7 @@ async function generate({
   });
 
   console.info(usage);
-  return text;
+  return JSON.parse(text);
 }
 
 module.exports = { generate };

@@ -21,7 +21,6 @@ Nucleoid is a contextual. So, once class or function is defined in declarative m
 - Prefer `var` for creating instance globally
 - Last statement in the code block is returned as the result
 - All queries must be run in imperative mode
-- `value` is reserved name, do not use it
 
 ### Modes
 
@@ -170,4 +169,13 @@ vt.rc;
 ```nuc
 // This is invalid
 return Vt.find(v => v.rc === 'Iz').rc;
+```
+
+### Reserved names
+
+- `value` is reserved name that `value` should not be used, otherwise it will throw an TypeError
+
+```nuc
+vt.value = 'Av'
+// TypeError: Cannot use 'value' as a name
 ```
